@@ -5,6 +5,7 @@ import 'package:desgram_ui/inrernal/dependencies/api_module.dart';
 class RepositoryModule {
   static ApiRepository? _apiRepository;
   static ApiRepository getApiRepository() {
-    return _apiRepository ??= ApiDataRepository(ApiModule.getAuthClient());
+    return _apiRepository ??=
+        ApiDataRepository(ApiModule.getAuthClient(), ApiModule.getApiClient());
   }
 }

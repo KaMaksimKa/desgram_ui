@@ -8,12 +8,12 @@ part of 'token_request_model.dart';
 
 TokenRequestModel _$TokenRequestModelFromJson(Map<String, dynamic> json) =>
     TokenRequestModel(
-      login: json['userName'] as String,
+      login: json['login'] as String,
       password: json['password'] as String,
     );
 
 Map<String, dynamic> _$TokenRequestModelToJson(TokenRequestModel instance) =>
     <String, dynamic>{
-      'userName': instance.login,
+      'login': instance.login,
       'password': instance.password,
     };

@@ -1,3 +1,4 @@
+import 'package:desgram_ui/domain/models/refresh_token_request_model.dart';
 import 'package:desgram_ui/domain/models/token_model.dart';
 import 'package:desgram_ui/domain/models/token_request_model.dart';
 import 'package:dio/dio.dart';
@@ -11,4 +12,7 @@ abstract class AuthClient {
 
   @POST("/api/Auth/Token")
   Future<TokenModel?> getToken(@Body() TokenRequestModel body);
+
+  @POST("/api/Auth/RefreshToken")
+  Future<TokenModel?> refreshToken(@Body() RefreshTokenRequestModel body);
 }

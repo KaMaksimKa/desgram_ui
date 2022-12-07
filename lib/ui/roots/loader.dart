@@ -12,9 +12,9 @@ class _ViewModel extends ChangeNotifier {
 
   void _asyncInint() async {
     if (await _authService.checkAuth()) {
-      AppNavigator.toUserPage(isRemoveUntil: true);
+      AppNavigator.toMainPage(isRemoveUntil: true);
     } else {
-      AppNavigator.toAuth();
+      AppNavigator.toAuth(isRemoveUntil: true);
     }
   }
 }
