@@ -10,12 +10,14 @@ PersonalInformationModel _$PersonalInformationModelFromJson(
         Map<String, dynamic> json) =>
     PersonalInformationModel(
       email: json['email'] as String,
-      birthDate: DateTime.parse(json['birthDate'] as String),
+      birthDate: json['birthDate'] == null
+          ? null
+          : DateTime.parse(json['birthDate'] as String),
     );
 
 Map<String, dynamic> _$PersonalInformationModelToJson(
         PersonalInformationModel instance) =>
     <String, dynamic>{
       'email': instance.email,
-      'birthDate': instance.birthDate.toIso8601String(),
+      'birthDate': instance.birthDate?.toIso8601String(),
     };

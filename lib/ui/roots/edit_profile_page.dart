@@ -1,8 +1,9 @@
+import 'package:desgram_ui/inrernal/config/shared_prefs.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:desgram_ui/ui/roots/image_user_avatar.dart';
+import 'package:desgram_ui/ui/app_widgets/image_user_avatar.dart';
 
 import '../../data/services/user_service.dart';
 import '../../domain/models/user_model.dart';
@@ -64,7 +65,9 @@ class _ViewModel extends ChangeNotifier {
   }
 
   Future asyncInit() async {
-    var userModel = await _userService.getCurrentUser();
+    var currentUserId = await SharedPrefs.getCurrentUserId();
+    var userModel =
+        await _userService.getUserByIdFromApi(userId: currentUserId!);
     if (userModel != null) {
       fullNameConroller.text = userModel.fullName;
       biographyConroller.text = userModel.biography;

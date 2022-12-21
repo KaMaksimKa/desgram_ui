@@ -2,6 +2,7 @@
 
 import 'package:desgram_ui/domain/models/image_content_model.dart';
 import 'package:desgram_ui/domain/models/partial_user_model.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'post_model.g.dart';
@@ -14,10 +15,9 @@ class PostModel {
   int? amountLikes;
   int? amountComments;
   bool isCommentsEnabled;
-  String createdDate;
-  List<ImageContentModel> imageContents;
-  List<String> hashTags;
   bool hasLiked;
+  DateTime createdDate;
+  List<ImageContentModel> imageContents;
 
   PostModel({
     required this.id,
@@ -28,7 +28,6 @@ class PostModel {
     required this.isCommentsEnabled,
     required this.createdDate,
     required this.imageContents,
-    required this.hashTags,
     required this.hasLiked,
   });
 

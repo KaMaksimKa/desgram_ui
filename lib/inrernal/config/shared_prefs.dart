@@ -1,26 +1,19 @@
-import 'dart:convert';
-
-import 'package:desgram_ui/domain/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
-  static const String _currentUserKey = "currentUserKey";
+  static const String _currentUserIdKey = "currentIdUserKey";
 
-  static Future<UserModel?> getCurrentUser() async {
+  static Future<String?> getCurrentUserId() async {
     var sharedPref = await SharedPreferences.getInstance();
-    var userJsonString = sharedPref.getString(_currentUserKey);
-    return (userJsonString == null || userJsonString == "")
-        ? null
-        : UserModel.fromJson(jsonDecode(userJsonString));
+    return sharedPref.getString(_currentUserIdKey);
   }
 
-  static Future setCurrentUser(UserModel? userModel) async {
+  static Future setCurrentUserId(String? userId) async {
     var sharedPref = await SharedPreferences.getInstance();
-    if (userModel == null) {
-      await sharedPref.remove(_currentUserKey);
+    if (userId == null) {
+      await sharedPref.remove(_currentUserIdKey);
     } else {
-      await sharedPref.setString(
-          _currentUserKey, jsonEncode(userModel.toJson()));
+      await sharedPref.setString(_currentUserIdKey, userId);
     }
   }
 }

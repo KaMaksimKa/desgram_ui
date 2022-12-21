@@ -1,5 +1,6 @@
 import 'package:desgram_ui/data/services/user_service.dart';
-import 'package:desgram_ui/infrastructure/helpers/date_time_helper.dart';
+import 'package:desgram_ui/utils/helpers/date_time_helper.dart';
+import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -8,12 +9,18 @@ import 'package:desgram_ui/domain/models/personal_information_model.dart';
 
 class _ViewModel extends ChangeNotifier {
   PersonalInformationModel? _personalInformationModel;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
 
   PersonalInformationModel? get personalInformationModel =>
       _personalInformationModel;
 
-  set personalInformationModel(val) {
+  set personalInformationModel(PersonalInformationModel? val) {
     _personalInformationModel = val;
+    emailController.text = val?.email ?? "";
+    birthDateController.text = val?.birthDate == null
+        ? ""
+        : DateTimeHelper.convertDateToRusFormat(val!.birthDate!);
     notifyListeners();
   }
 
@@ -25,6 +32,11 @@ class _ViewModel extends ChangeNotifier {
   Future asyncInit() async {
     personalInformationModel = await _userService.getPersonalInformation();
   }
+
+  void toEditBirthDate() {
+    AppNavigator.toEditBirthDatePage(personalInformationModel?.birthDate)
+        .then((value) => asyncInit());
+  }
 }
 
 class EditPersonalInformationPage extends StatelessWidget {
@@ -34,6 +46,7 @@ class EditPersonalInformationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var viewModel = context.watch<_ViewModel>();
     var personalInformationModel = viewModel.personalInformationModel;
+    var birthDate = personalInformationModel?.birthDate;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -78,9 +91,9 @@ class EditPersonalInformationPage extends StatelessWidget {
                               foregroundColor: Colors.black,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 8)),
-                          child: TextFormField(
+                          child: TextField(
                             readOnly: true,
-                            initialValue: personalInformationModel.email,
+                            controller: viewModel.emailController,
                             style: const TextStyle(
                                 fontSize: 18, color: Colors.grey),
                             decoration: const InputDecoration(
@@ -99,12 +112,12 @@ class EditPersonalInformationPage extends StatelessWidget {
                               foregroundColor: Colors.black,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 8)),
-                          child: TextFormField(
+                          child: TextField(
+                            onTap: viewModel.toEditBirthDate,
                             readOnly: true,
                             style: const TextStyle(
                                 fontSize: 18, color: Colors.grey),
-                            initialValue: DateTimeHelper.convertDateToRusFormat(
-                                personalInformationModel.birthDate),
+                            controller: viewModel.birthDateController,
                             decoration: const InputDecoration(
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),

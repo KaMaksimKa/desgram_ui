@@ -1,46 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:desgram_ui/data/services/user_service.dart';
+import 'package:desgram_ui/domain/models/email_code_model.dart';
+import 'package:desgram_ui/domain/models/try_create_user_model.dart';
+
+import '../../domain/exceptions/bad_request_exception.dart';
 import '../app_navigator.dart';
 
 class _ViewModelState {
-  final String? confirmCode;
+  final String? codeId;
+  final String? code;
+  final String? codeError;
+  final bool isLoading;
 
-  const _ViewModelState({
-    this.confirmCode,
-  });
+  const _ViewModelState(
+      {this.code, this.codeId, this.isLoading = false, this.codeError});
 
   _ViewModelState copyWith({
-    String? confirmCode,
+    String? codeId,
+    String? code,
+    String? codeError,
+    bool? isLoading,
   }) {
     return _ViewModelState(
-      confirmCode: confirmCode ?? this.confirmCode,
+      codeId: codeId ?? this.codeId,
+      code: code ?? this.code,
+      codeError: codeError ?? this.codeError,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }
 
 class _ViewModel extends ChangeNotifier {
-  TextEditingController codeController = TextEditingController();
+  final UserService _userService = UserService();
 
   final BuildContext context;
+  final TryCreateUserModel tryCreateUserModel;
+
+  TextEditingController codeController = TextEditingController();
 
   _ViewModelState _state = const _ViewModelState();
+
   _ViewModelState get state => _state;
+
   set state(_ViewModelState value) {
     _state = value;
     notifyListeners();
   }
 
-  _ViewModel({
-    required this.context,
-  }) {
+  _ViewModel({required this.context, required this.tryCreateUserModel}) {
+    sendSingUpCode();
+
     codeController.addListener(() {
-      state = state.copyWith(confirmCode: codeController.text);
+      state = state.copyWith(code: codeController.text);
     });
   }
 
   bool checkFields() {
-    return state.confirmCode?.isEmpty == false;
+    return state.code?.isEmpty == false;
+  }
+
+  void sendSingUpCode() async {
+    state = state.copyWith(
+        codeId: await _userService.sendSingUpCode(tryCreateUserModel.email));
+  }
+
+  void createUser() async {
+    var emailCodeId = state.codeId;
+    var confirmCode = state.code;
+    if (emailCodeId != null && confirmCode != null) {
+      state = state.copyWith(isLoading: true);
+      try {
+        await _userService
+            .createUser(
+                tryCreateUserModel: tryCreateUserModel,
+                emailCodeModel:
+                    EmailCodeModel(id: emailCodeId, code: confirmCode))
+            .then((value) => state = state.copyWith(isLoading: false));
+        AppNavigator.toAuth(isRemoveUntil: true);
+      } on BadRequestException catch (e) {
+        String? confirmCodeError;
+        if (e.errors.containsKey("Code")) {
+          confirmCodeError = e.errors["Code"]![0];
+        }
+
+        state = state.copyWith(codeError: confirmCodeError, isLoading: false);
+      }
+    }
   }
 }
 
@@ -81,16 +128,17 @@ class ConfirmUser extends StatelessWidget {
                         controller: viewModel.codeController,
                         autocorrect: false,
                         style: const TextStyle(fontSize: 19),
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
+                        decoration: InputDecoration(
+                            errorText: viewModel.state.codeError,
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 6),
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(6)),
                             ),
                             hintText: "######",
-                            hintStyle:
-                                TextStyle(fontSize: 19, color: Colors.grey)),
+                            hintStyle: const TextStyle(
+                                fontSize: 19, color: Colors.grey)),
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
@@ -100,7 +148,9 @@ class ConfirmUser extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                         ),
-                        onPressed: viewModel.checkFields() ? () {} : null,
+                        onPressed: viewModel.checkFields()
+                            ? viewModel.createUser
+                            : null,
                         child: const Text(
                           'Подтвердить',
                           style: TextStyle(fontSize: 20),
@@ -124,7 +174,7 @@ class ConfirmUser extends StatelessWidget {
                                   color: Colors.grey),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: viewModel.sendSingUpCode,
                               child: const Text("Запросить новый код"),
                             ),
                           ])
@@ -156,11 +206,12 @@ class ConfirmUser extends StatelessWidget {
     );
   }
 
-  static Widget create(String email) {
+  static Widget create(TryCreateUserModel tryCreateUserModel) {
     return ChangeNotifierProvider<_ViewModel>(
-      create: (context) => _ViewModel(context: context),
+      create: (context) =>
+          _ViewModel(context: context, tryCreateUserModel: tryCreateUserModel),
       child: ConfirmUser(
-        email: email,
+        email: tryCreateUserModel.email,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:desgram_ui/domain/models/image_content_model.dart';
@@ -21,7 +22,8 @@ class ImageUserAvatar extends StatelessWidget {
     } else {
       return CircleAvatar(
           radius: size / 2,
-          backgroundImage: NetworkImage(_getUrlAvatar(imageContentModel)));
+          backgroundImage:
+              CachedNetworkImageProvider(_getUrlAvatar(imageContentModel)));
     }
   }
 

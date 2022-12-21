@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'main_page.dart';
+import '../main_page_navigator.dart';
+import '../main_page_widget.dart';
 
 class _ViewModel extends ChangeNotifier {
   final BuildContext context;
@@ -12,7 +13,7 @@ class _ViewModel extends ChangeNotifier {
 }
 
 class AnotherAccountContent extends StatelessWidget {
-  final ContentMainPageNavigator appPageNavigator;
+  final MainPageNavigator appPageNavigator;
 
   const AnotherAccountContent({super.key, required this.appPageNavigator});
 
@@ -30,7 +31,7 @@ class AnotherAccountContent extends StatelessWidget {
     );
   }
 
-  static Widget create(ContentMainPageNavigator appPageNavigator) {
+  static Widget create(MainPageNavigator appPageNavigator) {
     return ChangeNotifierProvider(
       create: (context) => _ViewModel(context: context),
       child: AnotherAccountContent(appPageNavigator: appPageNavigator),

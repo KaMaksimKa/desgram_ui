@@ -8,6 +8,7 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
 import '../../data/clients/api_client.dart';
+import '../../domain/exceptions/exceptions.dart';
 
 String baseUrl = "http://10.0.2.2:5000";
 

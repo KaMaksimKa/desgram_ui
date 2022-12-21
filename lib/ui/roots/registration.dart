@@ -1,32 +1,54 @@
 import 'package:flutter/material.dart';
-
-import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:provider/provider.dart';
+
+import 'package:desgram_ui/data/services/user_service.dart';
+import 'package:desgram_ui/domain/exceptions/bad_request_exception.dart';
+import 'package:desgram_ui/domain/models/try_create_user_model.dart';
+import 'package:desgram_ui/ui/app_navigator.dart';
 
 class _ViewModelState {
   final String? userName;
   final String? email;
   final String? password;
   final String? retryPassword;
+  final bool isLoading;
+  final String? userNameError;
+  final String? emailError;
+  final String? passwordError;
+  final String? retryPasswordError;
 
-  const _ViewModelState({
-    this.userName,
-    this.email,
-    this.password,
-    this.retryPassword,
-  });
+  const _ViewModelState(
+      {this.userName,
+      this.email,
+      this.password,
+      this.retryPassword,
+      this.isLoading = false,
+      this.userNameError,
+      this.emailError,
+      this.passwordError,
+      this.retryPasswordError});
 
   _ViewModelState copyWith({
     String? userName,
     String? email,
     String? password,
     String? retryPassword,
+    bool? isLoading,
+    String? userNameError,
+    String? emailError,
+    String? passwordError,
+    String? retryPasswordError,
   }) {
     return _ViewModelState(
       userName: userName ?? this.userName,
       email: email ?? this.email,
       password: password ?? this.password,
       retryPassword: retryPassword ?? this.retryPassword,
+      isLoading: isLoading ?? this.isLoading,
+      userNameError: userNameError,
+      emailError: emailError,
+      passwordError: passwordError,
+      retryPasswordError: retryPasswordError,
     );
   }
 }
@@ -38,7 +60,7 @@ class _ViewModel extends ChangeNotifier {
   TextEditingController retryPasswordConroller = TextEditingController();
 
   final BuildContext context;
-
+  final UserService _userService = UserService();
   _ViewModelState _state = const _ViewModelState();
   _ViewModelState get state => _state;
   set state(_ViewModelState value) {
@@ -71,9 +93,51 @@ class _ViewModel extends ChangeNotifier {
         state.retryPassword?.isEmpty == false;
   }
 
-  void confirmUser() {
-    if (state.email != null) {
-      AppNavigator.toConfirmUser(state.email!);
+  void tryCreateUser() async {
+    var email = state.email;
+    var userName = state.userName;
+    var password = state.password;
+    var retryPassword = state.retryPassword;
+    if (email != null &&
+        userName != null &&
+        password != null &&
+        retryPassword != null) {
+      state = state.copyWith(isLoading: true);
+      try {
+        var tryCreateUserModel = TryCreateUserModel(
+            userName: userName,
+            email: email,
+            password: password,
+            retryPassword: retryPassword);
+        await _userService
+            .tryCreateUser(tryCreateUserModel)
+            .then((value) => state = state.copyWith(isLoading: false));
+
+        AppNavigator.toConfirmUser(tryCreateUserModel);
+      } on BadRequestException catch (e) {
+        String? userNameError;
+        String? emailError;
+        String? passwordError;
+        String? retryPasswordError;
+        if (e.errors.containsKey("UserName")) {
+          userNameError = e.errors["UserName"]![0];
+        }
+        if (e.errors.containsKey("Email")) {
+          emailError = e.errors["Email"]![0];
+        }
+        if (e.errors.containsKey("Password")) {
+          passwordError = e.errors["Password"]![0];
+        }
+        if (e.errors.containsKey("RetryPassword")) {
+          retryPasswordError = e.errors["RetryPassword"]![0];
+        }
+        state = state.copyWith(
+            userNameError: userNameError,
+            emailError: emailError,
+            passwordError: passwordError,
+            retryPasswordError: retryPasswordError,
+            isLoading: false);
+      }
     }
   }
 }
@@ -119,68 +183,77 @@ class Registration extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     TextField(
+                      readOnly: viewModel.state.isLoading,
                       controller: viewModel.userNameConroller,
                       autocorrect: false,
                       style: const TextStyle(fontSize: 19),
-                      decoration: const InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          errorMaxLines: 3,
+                          errorText: viewModel.state.userNameError,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 6),
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                           ),
-                          hintText: "Эл. адрес",
-                          hintStyle:
-                              TextStyle(fontSize: 19, color: Colors.grey)),
+                          hintText: "Имя пользователя",
+                          hintStyle: const TextStyle(
+                              fontSize: 19, color: Colors.grey)),
                     ),
                     const SizedBox(height: 15),
                     TextField(
+                      readOnly: viewModel.state.isLoading,
                       controller: viewModel.emailConroller,
                       enableSuggestions: false,
                       autocorrect: false,
                       style: const TextStyle(fontSize: 19),
-                      decoration: const InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          errorText: viewModel.state.emailError,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 6),
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                           ),
-                          hintText: "Имя пользователя",
-                          hintStyle:
-                              TextStyle(fontSize: 19, color: Colors.grey)),
+                          hintText: "Эл. адрес",
+                          hintStyle: const TextStyle(
+                              fontSize: 19, color: Colors.grey)),
                     ),
                     const SizedBox(height: 15),
                     TextField(
+                      readOnly: viewModel.state.isLoading,
                       controller: viewModel.passwordConroller,
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
                       style: const TextStyle(fontSize: 19),
-                      decoration: const InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          errorText: viewModel.state.passwordError,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 6),
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                           ),
                           hintText: "Пароль",
-                          hintStyle:
-                              TextStyle(fontSize: 19, color: Colors.grey)),
+                          hintStyle: const TextStyle(
+                              fontSize: 19, color: Colors.grey)),
                     ),
                     const SizedBox(height: 15),
                     TextField(
+                      readOnly: viewModel.state.isLoading,
                       controller: viewModel.retryPasswordConroller,
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
                       style: const TextStyle(fontSize: 19),
-                      decoration: const InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                          border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          errorText: viewModel.state.retryPasswordError,
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 6),
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                           ),
                           hintText: "Пароль ещё раз",
-                          hintStyle:
-                              TextStyle(fontSize: 19, color: Colors.grey)),
+                          hintStyle: const TextStyle(
+                              fontSize: 19, color: Colors.grey)),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
@@ -190,13 +263,17 @@ class Registration extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         ),
                       ),
-                      onPressed: viewModel.checkFields()
-                          ? viewModel.confirmUser
-                          : null,
-                      child: const Text(
-                        'Далее',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                      onPressed: viewModel.state.isLoading
+                          ? null
+                          : viewModel.checkFields()
+                              ? viewModel.tryCreateUser
+                              : null,
+                      child: viewModel.state.isLoading
+                          ? const CircularProgressIndicator()
+                          : const Text(
+                              'Далее',
+                              style: TextStyle(fontSize: 20),
+                            ),
                     ),
                   ],
                 ),

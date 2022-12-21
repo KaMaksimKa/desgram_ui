@@ -5,7 +5,7 @@ part 'personal_information_model.g.dart';
 @JsonSerializable()
 class PersonalInformationModel {
   final String email;
-  final DateTime birthDate;
+  final DateTime? birthDate;
 
   PersonalInformationModel({
     required this.email,

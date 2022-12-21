@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:desgram_ui/ui/roots/main_page.dart';
+import '../main_page_navigator.dart';
 
 class _ViewModel extends ChangeNotifier {
   final BuildContext context;
@@ -11,16 +11,16 @@ class _ViewModel extends ChangeNotifier {
   });
 }
 
-class AddContent extends StatelessWidget {
-  final ContentMainPageNavigator appPageNavigator;
+class SearchContent extends StatelessWidget {
+  final MainPageNavigator appPageNavigator;
 
-  const AddContent({super.key, required this.appPageNavigator});
+  const SearchContent({super.key, required this.appPageNavigator});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Добавить"),
+        title: const Text("Поиск"),
       ),
       body: Center(
           child: IconButton(
@@ -28,15 +28,15 @@ class AddContent extends StatelessWidget {
                 appPageNavigator.toAnotherAccountContent();
               },
               icon: const Icon(
-                Icons.add_box,
+                Icons.search,
               ))),
     );
   }
 
-  static Widget create(ContentMainPageNavigator appPageNavigator) {
+  static Widget create(MainPageNavigator appPageNavigator) {
     return ChangeNotifierProvider(
       create: (context) => _ViewModel(context: context),
-      child: AddContent(appPageNavigator: appPageNavigator),
+      child: SearchContent(appPageNavigator: appPageNavigator),
     );
   }
 }

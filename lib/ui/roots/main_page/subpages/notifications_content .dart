@@ -1,6 +1,7 @@
-import 'package:desgram_ui/ui/roots/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../main_page_navigator.dart';
 
 class _ViewModel extends ChangeNotifier {
   final BuildContext context;
@@ -11,7 +12,7 @@ class _ViewModel extends ChangeNotifier {
 }
 
 class NotificationsContent extends StatelessWidget {
-  final ContentMainPageNavigator appPageNavigator;
+  final MainPageNavigator appPageNavigator;
 
   const NotificationsContent({super.key, required this.appPageNavigator});
 
@@ -40,7 +41,7 @@ class NotificationsContent extends StatelessWidget {
     );
   }
 
-  static Widget create(ContentMainPageNavigator appPageNavigator) {
+  static Widget create(MainPageNavigator appPageNavigator) {
     return ChangeNotifierProvider(
       create: (context) => _ViewModel(context: context),
       child: NotificationsContent(appPageNavigator: appPageNavigator),
