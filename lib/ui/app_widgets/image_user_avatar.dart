@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:desgram_ui/domain/models/attach/image_with_url_model.dart';
 import 'package:flutter/material.dart';
 
-import 'package:desgram_ui/domain/models/image_content_model.dart';
+import 'package:desgram_ui/domain/models/attach/image_content_model.dart';
 import '../../inrernal/dependencies/api_module.dart';
 
 class ImageUserAvatar extends StatelessWidget {
@@ -9,6 +10,15 @@ class ImageUserAvatar extends StatelessWidget {
   final double size;
   const ImageUserAvatar(
       {required this.imageContentModel, required this.size, super.key});
+
+  factory ImageUserAvatar.fromImageModel(
+      {required ImageWithUrlModel? imageModel, required double size}) {
+    return ImageUserAvatar(
+        imageContentModel: imageModel == null
+            ? null
+            : ImageContentModel(imageCandidates: [imageModel]),
+        size: size);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:desgram_ui/data/clients/auth_client.dart';
+import 'package:desgram_ui/data/services/auth_service.dart';
 import 'package:desgram_ui/inrernal/config/token_storage.dart';
 import 'package:desgram_ui/inrernal/dependencies/repository_module.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
@@ -8,7 +9,6 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
 import '../../data/clients/api_client.dart';
-import '../../domain/exceptions/exceptions.dart';
 
 String baseUrl = "http://10.0.2.2:5000";
 
@@ -62,7 +62,7 @@ class ApiModule {
             options.headers["Authorization"] =
                 "Bearer ${tokenModel!.accessToken}";
           } catch (e) {
-            TokenStorage.setTokenModel(null);
+            AuthService().cleanUserLocalData();
             AppNavigator.toAuth(isRemoveUntil: true);
             return handler
                 .resolve(Response(requestOptions: options, statusCode: 400));

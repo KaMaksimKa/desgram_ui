@@ -16,6 +16,7 @@ class User extends DbEntity<String> {
   final int hasRequestedViewer;
   final int followsViewer;
   final int hasBlockedViewer;
+  final int blockedByViewer;
 
   User({
     required super.id,
@@ -30,6 +31,7 @@ class User extends DbEntity<String> {
     required this.hasRequestedViewer,
     required this.followsViewer,
     required this.hasBlockedViewer,
+    required this.blockedByViewer,
   });
 
   factory User.fromMap(Map<String, dynamic> map) => _$UserFromJson(map);

@@ -102,11 +102,10 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  static Widget create() {
+  static Widget create({int indexBottomBar = 0}) {
     return ChangeNotifierProvider(
-      create: (context) => MainPageViewModel(
-        context: context,
-      ),
+      create: (context) =>
+          MainPageViewModel(context: context, indexBottomBar: indexBottomBar),
       child: const MainPage(),
     );
   }

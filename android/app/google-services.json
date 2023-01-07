@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "3000561883",
+    "project_id": "desgram-6c93c",
+    "storage_bucket": "desgram-6c93c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3000561883:android:c8c9871b002070bbd79cfe",
+        "android_client_info": {
+          "package_name": "com.example.desgram_ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3000561883-rm481hkmhv453bpleqvnn3i83nsodsrr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfT1BcRwuW-Yen2k8-AqY6_fsQ2eAksrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3000561883-rm481hkmhv453bpleqvnn3i83nsodsrr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "3000561883-eguasopm987n5ud0itmi7s7suaik7q37.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.desgramUi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

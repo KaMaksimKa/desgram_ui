@@ -1,3 +1,29 @@
+CREATE TABLE t_HashtagPost(
+    [id] TEXT NOT NULL PRIMARY KEY,
+    [hashtag] TEXT NOT NULL,
+    [postId] TEXT NOT NULL,
+    FOREIGN KEY([postId]) REFERENCES t_Post([id]) ON DELETE CASCADE
+);
+
+CREATE TABLE t_InterestingPost(
+    [id] TEXT NOT NULL PRIMARY KEY,
+    [postId] TEXT NOT NULL,
+    FOREIGN KEY([postId]) REFERENCES t_Post([id]) ON DELETE CASCADE
+);
+
+CREATE TABLE t_SubscriptionPost(
+    [id] TEXT NOT NULL PRIMARY KEY,
+    [postId] TEXT NOT NULL,
+    FOREIGN KEY([postId]) REFERENCES t_Post([id]) ON DELETE CASCADE
+);
+
+
+CREATE TABLE t_UserPost(
+    [id] TEXT NOT NULL PRIMARY KEY,
+    [userId] TEXT NOT NULL,
+    [postId] TEXT NOT NULL,
+    FOREIGN KEY([postId]) REFERENCES t_Post([id]) ON DELETE CASCADE
+);
 
 CREATE TABLE t_Post(
     [id] TEXT NOT NULL PRIMARY KEY,
@@ -6,7 +32,9 @@ CREATE TABLE t_Post(
     [amountLikes] INT NULL,
     [amountComments] INT NULL,
     [isCommentsEnabled] BOOLEAN NOT NULL,
+    [isLikesVisible] BOOLEAN NOT NULL,
     [hasLiked] BOOLEAN NOT NULL,
+    [hasEdit] BOOLEAN NOT NULL,
     [createdDate] TEXT NOT NULL,
     FOREIGN KEY([userId]) REFERENCES t_PartialUser([id]) ON DELETE CASCADE
 );
@@ -55,7 +83,8 @@ CREATE TABLE t_User(
     [followedByViewer] BOOLEAN NOT NULL,
     [hasRequestedViewer] BOOLEAN NOT NULL,
     [followsViewer] BOOLEAN NOT NULL,
-    [hasBlockedViewer] BOOLEAN NOT NULL
+    [hasBlockedViewer] BOOLEAN NOT NULL,
+    [blockedByViewer] BOOLEAN NOT NULL
 );
 
 CREATE TABLE t_UserAvatarCandidate(
@@ -72,4 +101,9 @@ CREATE TABLE t_UserAvatar(
     [id] TEXT NOT NULL PRIMARY KEY,
     [userId] TEXT NOT NULL,
     FOREIGN KEY([userId]) REFERENCES t_User([id]) ON DELETE CASCADE
+);
+
+CREATE TABLE t_SearchString(
+    [id] TEXT NOT NULL PRIMARY KEY,
+    [searchString] TEXT NOT NULL
 );

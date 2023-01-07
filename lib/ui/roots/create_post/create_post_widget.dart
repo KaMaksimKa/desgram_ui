@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:desgram_ui/ui/roots/create_post/create_post_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -72,13 +71,13 @@ class CreatePostWidget extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: TextField(
-            style: TextStyle(fontSize: 22),
+            style: const TextStyle(fontSize: 22),
             controller: viewModel.descriptionController,
             decoration: const InputDecoration(hintText: "Добавте подпись..."),
             maxLines: 10,
@@ -89,7 +88,7 @@ class CreatePostWidget extends StatelessWidget {
           height: 15,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
               Row(
@@ -146,7 +145,7 @@ class CreatePostWidget extends StatelessWidget {
 
   static Widget create() {
     return ChangeNotifierProvider(
-      create: (context) => CreatePostViewModel(),
+      create: (context) => CreatePostViewModel(context: context),
       child: const CreatePostWidget(),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -5,11 +6,12 @@ import '../../../../../data/services/auth_service.dart';
 import '../../../../../data/services/post_service.dart';
 import '../../../../../data/services/user_service.dart';
 import '../../../../../domain/exceptions/exceptions.dart';
-import '../../../../../domain/models/post_model.dart';
-import '../../../../../domain/models/user_model.dart';
+import '../../../../../domain/models/post/post_model.dart';
+import '../../../../../domain/models/user/user_model.dart';
 import '../../../../../inrernal/config/shared_prefs.dart';
 import '../../../../app_navigator.dart';
 import '../../main_page_navigator.dart';
+import '../subscriptions/subscriptions_view_model.dart';
 
 class AccountViewModelState {
   final UserModel? currentUserModel;
@@ -58,33 +60,42 @@ class AccountViewModel extends SubpageViewModel {
     required super.mainPageNavigator,
   }) {
     scrollController.addListener(_scrollListener);
+    UserService.updateUserListeners.add(onUserUpdate);
     SharedPrefs.getCurrentUserId().then((value) {
       currentUserId = value!;
       asyncInit();
     });
   }
 
+  Future onUserUpdate({required UserModel userModel}) async {
+    if (userModel.id == currentUserId) {
+      state = state.copyWith(currentUserModel: userModel);
+    }
+  }
+
+  @override
+  void dispose() {
+    UserService.updateUserListeners.remove(onUserUpdate);
+    super.dispose();
+  }
+
   Future asyncInit() async {
-    updateCurrentUser();
-    loadPosts(isDeleteOld: true);
+    _updateCurrentUser();
+    _loadPosts(isDeleteOld: true);
   }
 
-  Future updateCurrentUser() async {
-    _userService.getUserByIdFromDb(userId: currentUserId).then((value) {
-      state = state.copyWith(currentUserModel: value);
-    });
+  Future _updateCurrentUser() async {
+    state = state.copyWith(
+        currentUserModel:
+            await _userService.getUserByIdFromDb(userId: currentUserId));
     try {
-      await _userService
-          .updateUserInDb(userId: currentUserId)
-          .then((value) async {
-        _userService.getUserByIdFromDb(userId: currentUserId).then((value) {
-          state = state.copyWith(currentUserModel: value);
-        });
-      });
-    } on NoNetworkException {}
+      await _userService.updateUserInDb(userId: currentUserId);
+    } on NoNetworkException {
+      showNoNetworkDialog(context: context);
+    }
   }
 
-  Future loadPosts({bool isDeleteOld = false}) async {
+  Future _loadPosts({bool isDeleteOld = false}) async {
     if (state.isPostsLoading) {
       return;
     }
@@ -96,24 +107,30 @@ class AccountViewModel extends SubpageViewModel {
           skip: state.posts.length,
           take: 12,
           isDeleteOld: isDeleteOld);
-    } on NoNetworkException {}
-
-    state = state.copyWith(
-        isPostsLoading: false,
-        posts:
-            await _postService.getPostsByUserIdFromDb(userId: currentUserId));
+    } on NoNetworkException {
+      showNoNetworkDialog(context: context);
+    } finally {
+      state = state.copyWith(
+          isPostsLoading: false,
+          posts:
+              await _postService.getPostsByUserIdFromDb(userId: currentUserId));
+    }
   }
 
-  void _scrollListener() {
+  Future _scrollListener() async {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
-      loadPosts();
+      await _loadPosts();
     }
   }
 
   void _logout() {
-    _authService.logout();
-    AppNavigator.toAuth(isRemoveUntil: true);
+    try {
+      _authService.logout();
+      AppNavigator.toAuth(isRemoveUntil: true);
+    } on NoNetworkException {
+      showNoNetworkDialog(context: context);
+    }
   }
 
   void showAccountMenu() {
@@ -143,7 +160,10 @@ class AccountViewModel extends SubpageViewModel {
                     minimumSize: const Size.fromHeight(50),
                     textStyle: const TextStyle(fontSize: 20),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    mainPageNavigator.toSettings();
+                  },
                   icon: const Icon(
                     Icons.settings_outlined,
                     size: 30,
@@ -159,7 +179,10 @@ class AccountViewModel extends SubpageViewModel {
                     minimumSize: const Size.fromHeight(50),
                     textStyle: const TextStyle(fontSize: 20),
                   ),
-                  onPressed: _logout,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _logout();
+                  },
                   icon: const Icon(
                     Icons.logout_outlined,
                     size: 30,
@@ -178,5 +201,15 @@ class AccountViewModel extends SubpageViewModel {
 
   void toEditProfilePage() {
     AppNavigator.toEditProfilePage();
+  }
+
+  Future toFollowers() async {
+    mainPageNavigator.toSubscriptions(
+        userId: currentUserId, subscriptionType: SubscriptionType.followers);
+  }
+
+  Future toFollowing() async {
+    mainPageNavigator.toSubscriptions(
+        userId: currentUserId, subscriptionType: SubscriptionType.followings);
   }
 }

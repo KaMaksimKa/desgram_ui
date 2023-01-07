@@ -25,9 +25,7 @@ class MainPageViewModel extends ChangeNotifier {
     4: MainPageRoutes.accountContent
   };
 
-  MainPageViewModel({
-    required this.context,
-  });
+  MainPageViewModel({required this.context, this.indexBottomBar = 0});
 
   bool maybePopStackIndexBottomBar() {
     if (stackIndexBottomBar.length != 1) {

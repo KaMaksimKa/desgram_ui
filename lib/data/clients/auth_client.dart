@@ -1,9 +1,9 @@
-import 'package:desgram_ui/domain/models/create_user_model.dart';
+import 'package:desgram_ui/domain/models/user/create_user_model.dart';
 import 'package:desgram_ui/domain/models/guid_id_model.dart';
 import 'package:desgram_ui/domain/models/refresh_token_request_model.dart';
 import 'package:desgram_ui/domain/models/token_model.dart';
 import 'package:desgram_ui/domain/models/token_request_model.dart';
-import 'package:desgram_ui/domain/models/try_create_user_model.dart';
+import 'package:desgram_ui/domain/models/user/try_create_user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 

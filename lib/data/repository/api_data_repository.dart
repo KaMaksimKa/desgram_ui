@@ -2,30 +2,33 @@ import 'dart:io';
 
 import 'package:desgram_ui/data/clients/api_client.dart';
 import 'package:desgram_ui/data/clients/auth_client.dart';
-import 'package:desgram_ui/domain/models/create_post_model.dart';
-import 'package:desgram_ui/domain/models/create_comment_model.dart';
-import 'package:desgram_ui/domain/models/comment_model.dart';
-import 'package:desgram_ui/domain/models/change_user_name_model.dart';
-import 'package:desgram_ui/domain/models/change_password_model.dart';
-import 'package:desgram_ui/domain/models/change_likes_visibility_model.dart';
-import 'package:desgram_ui/domain/models/change_is_comments_enabled_model.dart';
-import 'package:desgram_ui/domain/models/change_email_model.dart';
-import 'package:desgram_ui/domain/models/create_user_model.dart';
-import 'package:desgram_ui/domain/models/email_code_model.dart';
+import 'package:desgram_ui/domain/models/notification/notification_model.dart';
+import 'package:desgram_ui/domain/models/post/create_post_model.dart';
+import 'package:desgram_ui/domain/models/comment/create_comment_model.dart';
+import 'package:desgram_ui/domain/models/comment/comment_model.dart';
+import 'package:desgram_ui/domain/models/user/change_user_name_model.dart';
+import 'package:desgram_ui/domain/models/user/change_password_model.dart';
+import 'package:desgram_ui/domain/models/post/change_likes_visibility_model.dart';
+import 'package:desgram_ui/domain/models/comment/change_is_comments_enabled_model.dart';
+import 'package:desgram_ui/domain/models/user/change_email_model.dart';
+import 'package:desgram_ui/domain/models/user/create_user_model.dart';
+import 'package:desgram_ui/domain/models/user/email_code_model.dart';
 import 'package:desgram_ui/domain/models/guid_id_model.dart';
-import 'package:desgram_ui/domain/models/metadata_model.dart';
-import 'package:desgram_ui/domain/models/partial_user_model.dart';
-import 'package:desgram_ui/domain/models/personal_information_model.dart';
-import 'package:desgram_ui/domain/models/post_model.dart';
-import 'package:desgram_ui/domain/models/profile_model.dart';
+import 'package:desgram_ui/domain/models/post/hashtag_model.dart';
+import 'package:desgram_ui/domain/models/attach/metadata_model.dart';
+import 'package:desgram_ui/domain/models/user/partial_user_model.dart';
+import 'package:desgram_ui/domain/models/user/personal_information_model.dart';
+import 'package:desgram_ui/domain/models/post/post_model.dart';
+import 'package:desgram_ui/domain/models/user/profile_model.dart';
+import 'package:desgram_ui/domain/models/push_token_model.dart';
 import 'package:desgram_ui/domain/models/refresh_token_request_model.dart';
 import 'package:desgram_ui/domain/models/token_model.dart';
 import 'package:desgram_ui/domain/models/token_request_model.dart';
-import 'package:desgram_ui/domain/models/try_create_user_model.dart';
-import 'package:desgram_ui/domain/models/update_post_model.dart';
-import 'package:desgram_ui/domain/models/update_comment_model.dart';
-import 'package:desgram_ui/domain/models/update_birthday_model.dart';
-import 'package:desgram_ui/domain/models/user_model.dart';
+import 'package:desgram_ui/domain/models/user/try_create_user_model.dart';
+import 'package:desgram_ui/domain/models/post/update_post_model.dart';
+import 'package:desgram_ui/domain/models/comment/update_comment_model.dart';
+import 'package:desgram_ui/domain/models/user/update_birthday_model.dart';
+import 'package:desgram_ui/domain/models/user/user_model.dart';
 import 'package:desgram_ui/domain/repository/api_repository.dart';
 
 class ApiDataRepository extends ApiRepository {
@@ -94,61 +97,45 @@ class ApiDataRepository extends ApiRepository {
   }
 
   @override
-  Future acceptSubscription({required String followerId}) {
-    // TODO: implement acceptSubscription
-    throw UnimplementedError();
-  }
+  Future acceptSubscription({required String followerId}) async =>
+      await _apiClient.acceptSubscription(followerId);
 
   @override
   Future<CommentModel?> addComment(
-      {required CreateCommentModel createCommentModel}) {
-    // TODO: implement addComment
-    throw UnimplementedError();
-  }
+          {required CreateCommentModel createCommentModel}) async =>
+      await _apiClient.addComment(createCommentModel);
 
   @override
-  Future<int> addLikeComment({required String commentId}) {
-    // TODO: implement addLikeComment
-    throw UnimplementedError();
-  }
+  Future<int> addLikeComment({required String commentId}) async =>
+      await _apiClient.addLikeComment(commentId);
 
   @override
-  Future<int> addLikePost({required String postId}) {
-    // TODO: implement addLikePost
-    throw UnimplementedError();
-  }
+  Future<int?> addLikePost({required String postId}) async =>
+      (await _apiClient.addLikePost(postId)).amountLikes;
 
   @override
-  Future blockUser({required String blockedUserId}) {
-    // TODO: implement blockUser
-    throw UnimplementedError();
-  }
+  Future blockUser({required String blockedUserId}) async =>
+      await _apiClient.blockUser(blockedUserId);
 
   @override
-  Future changeAccountAvailability({required bool isPrivate}) {
-    // TODO: implement changeAccountAvailability
-    throw UnimplementedError();
-  }
+  Future changeAccountAvailability({required bool isPrivate}) async =>
+      await _apiClient.changeAccountAvailability(isPrivate);
 
   @override
-  Future changeEmail({required ChangeEmailModel body}) {
-    // TODO: implement changeEmail
-    throw UnimplementedError();
-  }
+  Future changeEmail({required ChangeEmailModel changeEmailModel}) async =>
+      await _apiClient.changeEmail(changeEmailModel);
 
   @override
   Future changeIsCommentsEnabled(
-      {required ChangeIsCommentsEnabledModel changeIsCommentsEnabledModel}) {
-    // TODO: implement changeIsCommentsEnabled
-    throw UnimplementedError();
-  }
+          {required ChangeIsCommentsEnabledModel
+              changeIsCommentsEnabledModel}) async =>
+      await _apiClient.changeIsCommentsEnabled(changeIsCommentsEnabledModel);
 
   @override
   Future changeLikesVisibility(
-      {required ChangeLikesVisibilityModel changeLikesVisibilityModel}) {
-    // TODO: implement changeLikesVisibility
-    throw UnimplementedError();
-  }
+          {required ChangeLikesVisibilityModel
+              changeLikesVisibilityModel}) async =>
+      await _apiClient.changeLikesVisibility(changeLikesVisibilityModel);
 
   @override
   Future createPost({required CreatePostModel createPostModel}) async {
@@ -156,74 +143,58 @@ class ApiDataRepository extends ApiRepository {
   }
 
   @override
-  Future deleteComment({required String commentId}) {
-    // TODO: implement deleteComment
-    throw UnimplementedError();
-  }
+  Future deleteComment({required String commentId}) async =>
+      await _apiClient.deleteComment(commentId);
 
   @override
-  Future deleteFollower({required String followerId}) {
-    // TODO: implement deleteFollower
-    throw UnimplementedError();
-  }
+  Future deleteFollower({required String followerId}) async =>
+      await _apiClient.deleteFollower(followerId);
 
   @override
-  Future<int> deleteLikeComment({required String commentId}) {
-    // TODO: implement deleteLikeComment
-    throw UnimplementedError();
-  }
+  Future<int> deleteLikeComment({required String commentId}) async =>
+      await _apiClient.deleteLikeComment(commentId);
 
   @override
-  Future<int> deleteLikePost({required String postId}) {
-    // TODO: implement deleteLikePost
-    throw UnimplementedError();
-  }
+  Future<int?> deleteLikePost({required String postId}) async =>
+      (await _apiClient.deleteLikePost(postId)).amountLikes;
 
   @override
-  Future deletePost({required String postId}) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
-  }
+  Future deletePost({required String postId}) async =>
+      await _apiClient.deletePost(postId);
 
   @override
   Future<List<PartialUserModel>?> getBlockedUsers(
-      {required int skip, required int take}) {
-    // TODO: implement getBlockedUsers
-    throw UnimplementedError();
-  }
+          {required int skip, required int take}) async =>
+      await _apiClient.getBlockedUsers(skip, take);
 
   @override
   Future<List<CommentModel>?> getCommentsByPost(
-      {required String postId, required int skip, required int take}) {
-    // TODO: implement getCommentsByPost
-    throw UnimplementedError();
-  }
-
+          {required String postId,
+          required int skip,
+          required int take}) async =>
+      await _apiClient.getCommentsByPost(postId, skip, take);
   @override
-  Future<List<PostModel>?> getPosts({required int skip, required int take}) {
-    // TODO: implement getPosts
-    throw UnimplementedError();
+  Future<List<PostModel>?> getPosts(
+      {required int skip, required int take}) async {
+    return await _apiClient.getPosts(skip, take);
   }
 
   @override
   Future<List<PostModel>?> getPostsByHashTag(
-      {required String hashtag, required int skip, required int take}) {
-    // TODO: implement getPostsByHashTag
-    throw UnimplementedError();
-  }
+          {required String hashtag,
+          required int skip,
+          required int take}) async =>
+      await _apiClient.getPostsByHashTag(hashtag, skip, take);
 
   @override
   Future<List<PartialUserModel>?> getSubRequests(
-      {required int skip, required int take}) {
-    // TODO: implement getSubRequests
-    throw UnimplementedError();
-  }
+          {required int skip, required int take}) async =>
+      await _apiClient.getSubRequests(skip, take);
 
   @override
   Future<List<PostModel>?> getSubscriptionsFeed(
-      {required int skip, required int take}) {
-    // TODO: implement getSubscriptionsFeed
-    throw UnimplementedError();
+      {required int skip, required int take}) async {
+    return await _apiClient.getSubscriptionsFeed(skip, take);
   }
 
   @override
@@ -233,84 +204,69 @@ class ApiDataRepository extends ApiRepository {
 
   @override
   Future<List<PartialUserModel>?> getUserFollowers(
-      {required String userId, required int skip, required int take}) {
-    // TODO: implement getUserFollowers
-    throw UnimplementedError();
-  }
+          {required String userId,
+          required int skip,
+          required int take}) async =>
+      await _apiClient.getUserFollowers(userId, skip, take);
 
   @override
   Future<List<PartialUserModel>?> getUserFollowing(
-      {required String userId, required int skip, required int take}) {
-    // TODO: implement getUserFollowing
-    throw UnimplementedError();
-  }
+          {required String userId,
+          required int skip,
+          required int take}) async =>
+      await _apiClient.getUserFollowing(userId, skip, take);
 
   @override
-  Future logoutAllDevice() {
-    // TODO: implement logoutAllDevice
-    throw UnimplementedError();
-  }
+  Future logoutAllDevice() async => await _apiClient.logoutAllDevice();
 
   @override
   Future<List<PartialUserModel>?> searchUsersByName(
-      {required String searchUserName, required int skip, required int take}) {
-    // TODO: implement searchUsersByName
-    throw UnimplementedError();
+      {required String searchUserName,
+      required int skip,
+      required int take}) async {
+    return await _apiClient.searchUsersByName(searchUserName, skip, take);
   }
 
   @override
-  Future<GuidIdModel> sendChangeEmailCode({required String newEmail}) {
-    // TODO: implement sendChangeEmailCode
-    throw UnimplementedError();
+  Future<GuidIdModel> sendChangeEmailCode({required String newEmail}) async =>
+      await _apiClient.sendChangeEmailCode(newEmail);
+
+  @override
+  Future subscribe({required String contentMakerId}) async {
+    await _apiClient.subscribe(contentMakerId);
   }
 
   @override
-  Future subscribe({required String contentMakerId}) {
-    // TODO: implement subscribe
-    throw UnimplementedError();
+  Future tryChangeEmail({required String newEmail}) async =>
+      await _apiClient.tryChangeEmail(newEmail);
+
+  @override
+  Future unblockUser({required String unblockedUserId}) async =>
+      await _apiClient.unblockUser(unblockedUserId);
+
+  @override
+  Future unsubscribe({required String contentMakerId}) async {
+    await _apiClient.unsubscribe(contentMakerId);
   }
 
   @override
-  Future tryChangeEmail({required String newEmail}) {
-    // TODO: implement tryChangeEmail
-    throw UnimplementedError();
-  }
+  Future updateComment(
+          {required UpdateCommentModel updateCommentModel}) async =>
+      await _apiClient.updateComment(updateCommentModel);
 
   @override
-  Future unblockUser({required String unblockedUserId}) {
-    // TODO: implement unblockUser
-    throw UnimplementedError();
-  }
+  Future updatePost({required UpdatePostModel updatePostModel}) async =>
+      await _apiClient.updatePost(updatePostModel);
 
   @override
-  Future unsubscribe({required String contentMakerId}) {
-    // TODO: implement unsubscribe
-    throw UnimplementedError();
-  }
+  Future changePassword(
+          {required ChangePasswordModel changePasswordModel}) async =>
+      await _apiClient.changePassword(changePasswordModel);
 
   @override
-  Future updateComment({required UpdateCommentModel updateCommentModel}) {
-    // TODO: implement updateComment
-    throw UnimplementedError();
-  }
-
-  @override
-  Future updatePost({required UpdatePostModel updatePostModel}) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
-  }
-
-  @override
-  Future changePassword({required ChangePasswordModel changePasswordModel}) {
-    // TODO: implement changePassword
-    throw UnimplementedError();
-  }
-
-  @override
-  Future changeUserName({required ChangeUserNameModel changeUserNameModel}) {
-    // TODO: implement changeUserName
-    throw UnimplementedError();
-  }
+  Future changeUserName(
+          {required ChangeUserNameModel changeUserNameModel}) async =>
+      await _apiClient.changeUserName(changeUserNameModel);
 
   @override
   Future updateBirthday({required DateTime? birthday}) async {
@@ -336,4 +292,34 @@ class ApiDataRepository extends ApiRepository {
   Future addAvatar({required MetadataModel metadataModel}) async {
     await _apiClient.addAvatar(metadataModel);
   }
+
+  @override
+  Future<List<HashtagModel>?> searchHashtags({
+    required String searchString,
+    required int skip,
+    required int take,
+  }) async {
+    return await _apiClient.searchHashtags(searchString, skip, take);
+  }
+
+  @override
+  Future subscribePush({required String token}) async =>
+      await _apiClient.subscribePush(PushTokenModel(token: token));
+
+  @override
+  Future unsubscribePush() async => await _apiClient.unsubscribePush();
+
+  @override
+  Future<List<NotificationModel>?> getNotifications(
+      {DateTime? skipDate, required int take}) async {
+    return await _apiClient.getNotifications(
+        skipDate?.toUtc().toIso8601String(), take);
+  }
+
+  @override
+  Future<PostModel?> getPostById({required String postId}) async =>
+      await _apiClient.getPostById(postId);
+
+  @override
+  Future deleteAvatar() async => await _apiClient.deleteAvatar();
 }

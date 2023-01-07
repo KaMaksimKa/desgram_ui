@@ -1,10 +1,16 @@
+import 'package:desgram_ui/data/services/attach_service.dart';
 import 'package:desgram_ui/data/services/user_service.dart';
+import 'package:desgram_ui/domain/exceptions/exceptions.dart';
 import 'package:desgram_ui/inrernal/config/shared_prefs.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:desgram_ui/ui/app_widgets/image_user_avatar.dart';
+import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:flutter/material.dart';
 
 class ModalBottomSheets {
+  static final AttachService _attachService = AttachService();
+  static final UserService _userService = UserService();
+
   static Future showEditAvatar({required BuildContext context}) async {
     final userService = UserService();
     var currentUserId = await SharedPrefs.getCurrentUserId();
@@ -57,7 +63,7 @@ class ModalBottomSheets {
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        AppNavigator.toChooseNewAvatarPage();
+                        _uploadNewAvatar();
                       },
                       style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.black),
@@ -82,40 +88,95 @@ class ModalBottomSheets {
                               ))
                         ],
                       )),
-                  TextButton(
-                      onPressed: () {},
-                      style:
-                          TextButton.styleFrom(foregroundColor: Colors.black),
-                      child: Row(
-                        children: const [
-                          Expanded(
-                              flex: 1,
-                              child: Icon(
-                                Icons.delete_outline,
-                                color: Colors.red,
-                                size: 30,
-                              )),
-                          Expanded(
-                              flex: 7,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 5),
-                                child: Text(
-                                  "Удалить текущее фото",
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ))
-                        ],
-                      ))
+                  if (currentUser.avatar != null)
+                    TextButton(
+                        onPressed: _deleteAvatar,
+                        style:
+                            TextButton.styleFrom(foregroundColor: Colors.black),
+                        child: Row(
+                          children: const [
+                            Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.red,
+                                  size: 30,
+                                )),
+                            Expanded(
+                                flex: 7,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    "Удалить текущее фото",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ))
+                          ],
+                        ))
                 ]),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               )
             ],
           );
         });
+  }
+
+  static Future _uploadNewAvatar() async {
+    var newAvatar = await AppNavigator.toChooseImagePage();
+    if (newAvatar == null) {
+      return;
+    }
+    _showLoadingIndicator();
+    try {
+      var metadataModel = await _attachService.uploadFile(file: newAvatar);
+      if (metadataModel != null) {
+        await _userService.addAvatar(metadataModel: metadataModel);
+      }
+    } on NoNetworkException {
+      showNoNetworkDialog(context: AppNavigator.key.currentContext!);
+    } finally {
+      AppNavigator.popPage();
+    }
+  }
+
+  static Future _deleteAvatar() async {
+    _showLoadingIndicator();
+    try {
+      await _userService.deleteAvatar();
+    } on NoNetworkException {
+      showNoNetworkDialog(context: AppNavigator.key.currentContext!);
+    } finally {
+      AppNavigator.popPage();
+    }
+  }
+
+  static Future _showLoadingIndicator() async {
+    showDialog(
+        barrierDismissible: false,
+        context: AppNavigator.key.currentState!.context,
+        builder: (context) => WillPopScope(
+              onWillPop: () async => false,
+              child: AlertDialog(
+                content: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      children: const [
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          "Загрузка",
+                          style: TextStyle(fontSize: 20),
+                        )
+                      ],
+                    )),
+              ),
+            ));
   }
 }

@@ -1,10 +1,10 @@
-import 'package:desgram_ui/data/services/database.dart';
+import 'package:desgram_ui/inrernal/init_app.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DB.instanse.init();
+  await initApp();
   runApp(const MyApp());
 }
 

@@ -24,6 +24,7 @@ class AccountWidget extends StatelessWidget {
         ),
         elevation: 0,
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(
             color: Colors.black, fontSize: 24, fontWeight: FontWeight.w700),
         title: userModel == null
@@ -89,7 +90,7 @@ class AccountWidget extends StatelessWidget {
                                         child: TextButton(
                                       style: TextButton.styleFrom(
                                           foregroundColor: Colors.black),
-                                      onPressed: () {},
+                                      onPressed: viewModel.toFollowers,
                                       child: Column(
                                         children: [
                                           Text(
@@ -98,7 +99,7 @@ class AccountWidget extends StatelessWidget {
                                                 fontSize: 22,
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          const Text("Публик...")
+                                          const Text("Подп...")
                                         ],
                                       ),
                                     )),
@@ -106,7 +107,7 @@ class AccountWidget extends StatelessWidget {
                                         child: TextButton(
                                       style: TextButton.styleFrom(
                                           foregroundColor: Colors.black),
-                                      onPressed: () {},
+                                      onPressed: viewModel.toFollowing,
                                       child: Column(
                                         children: [
                                           Text(
@@ -115,7 +116,7 @@ class AccountWidget extends StatelessWidget {
                                                 fontSize: 22,
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          const Text("Публик...")
+                                          const Text("Подп...")
                                         ],
                                       ),
                                     )),

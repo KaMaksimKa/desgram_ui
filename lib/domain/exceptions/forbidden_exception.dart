@@ -1,0 +1,1 @@
+class ForbiddenException implements Exception {}

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../main_page_navigator.dart';
 
 class FeedUserWidget extends StatelessWidget {
-  const FeedUserWidget._({super.key});
+  const FeedUserWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,9 @@ class FeedUserWidget extends StatelessWidget {
           SliverList(
               delegate: SliverChildBuilderDelegate(
             (context, index) => PostFeedWidget(
+              currentUserId: viewModel.currentUserId,
               post: posts[index],
+              mainPageNavigator: viewModel.mainPageNavigator,
             ),
             childCount: posts.length,
           )),
@@ -58,7 +60,7 @@ class FeedUserWidget extends StatelessWidget {
           context: context,
           mainPageNavigator: mainPageNavigator,
           userId: userId),
-      child: const FeedUserWidget._(),
+      child: const FeedUserWidget(),
     );
   }
 }

@@ -1,5 +1,6 @@
-import 'package:desgram_ui/domain/entities/db_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'package:desgram_ui/domain/entities/db_entity.dart';
 
 part 'post.g.dart';
 
@@ -10,7 +11,9 @@ class Post extends DbEntity<String> {
   final int? amountLikes;
   final int? amountComments;
   final int isCommentsEnabled;
+  final int isLikesVisible;
   final int hasLiked;
+  final int hasEdit;
   final DateTime createdDate;
   Post({
     required super.id,
@@ -19,7 +22,9 @@ class Post extends DbEntity<String> {
     required this.amountLikes,
     required this.amountComments,
     required this.isCommentsEnabled,
+    required this.isLikesVisible,
     required this.hasLiked,
+    required this.hasEdit,
     required this.createdDate,
   });
 

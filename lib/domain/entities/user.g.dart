@@ -19,6 +19,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       hasRequestedViewer: json['hasRequestedViewer'] as int,
       followsViewer: json['followsViewer'] as int,
       hasBlockedViewer: json['hasBlockedViewer'] as int,
+      blockedByViewer: json['blockedByViewer'] as int,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -34,4 +35,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'hasRequestedViewer': instance.hasRequestedViewer,
       'followsViewer': instance.followsViewer,
       'hasBlockedViewer': instance.hasBlockedViewer,
+      'blockedByViewer': instance.blockedByViewer,
     };

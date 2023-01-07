@@ -1,4 +1,4 @@
-import 'package:desgram_ui/domain/models/image_with_url_model.dart';
+import 'package:desgram_ui/domain/models/attach/image_with_url_model.dart';
 
 class ImageContentHelper {
   static ImageWithUrlModel chooseImage(

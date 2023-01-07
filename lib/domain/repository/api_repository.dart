@@ -1,26 +1,27 @@
 import 'dart:io';
 
-import 'package:desgram_ui/domain/models/email_code_model.dart';
+import 'package:desgram_ui/domain/models/user/email_code_model.dart';
 import 'package:desgram_ui/domain/models/guid_id_model.dart';
-import 'package:desgram_ui/domain/models/metadata_model.dart';
-import 'package:desgram_ui/domain/models/user_model.dart';
+import 'package:desgram_ui/domain/models/attach/metadata_model.dart';
+import 'package:desgram_ui/domain/models/user/user_model.dart';
 
-import '../models/change_email_model.dart';
-import '../models/change_is_comments_enabled_model.dart';
-import '../models/change_likes_visibility_model.dart';
-import '../models/change_password_model.dart';
-import '../models/change_user_name_model.dart';
-import '../models/comment_model.dart';
-import '../models/create_comment_model.dart';
-import '../models/create_post_model.dart';
-import '../models/partial_user_model.dart';
-import '../models/personal_information_model.dart';
-import '../models/post_model.dart';
+import '../models/notification/notification_model.dart';
+import '../models/user/change_email_model.dart';
+import '../models/comment/change_is_comments_enabled_model.dart';
+import '../models/post/change_likes_visibility_model.dart';
+import '../models/user/change_password_model.dart';
+import '../models/user/change_user_name_model.dart';
+import '../models/comment/comment_model.dart';
+import '../models/comment/create_comment_model.dart';
+import '../models/post/create_post_model.dart';
+import '../models/post/hashtag_model.dart';
+import '../models/user/partial_user_model.dart';
+import '../models/user/personal_information_model.dart';
+import '../models/post/post_model.dart';
 import '../models/token_model.dart';
-import '../models/try_create_user_model.dart';
-import '../models/update_birthday_model.dart';
-import '../models/update_comment_model.dart';
-import '../models/update_post_model.dart';
+import '../models/user/try_create_user_model.dart';
+import '../models/comment/update_comment_model.dart';
+import '../models/post/update_post_model.dart';
 
 abstract class ApiRepository {
   Future logoutAllDevice();
@@ -44,6 +45,9 @@ abstract class ApiRepository {
     required int skip,
     required int take,
   });
+
+  Future<List<HashtagModel>?> searchHashtags(
+      {required String searchString, required int skip, required int take});
 
   Future<List<PostModel>?> getSubscriptionsFeed({
     required int skip,
@@ -85,9 +89,9 @@ abstract class ApiRepository {
     required int take,
   });
 
-  Future<int> addLikePost({required String postId});
+  Future<int?> addLikePost({required String postId});
 
-  Future<int> deleteLikePost({required String postId});
+  Future<int?> deleteLikePost({required String postId});
 
   Future<int> addLikeComment({required String commentId});
 
@@ -145,7 +149,7 @@ abstract class ApiRepository {
 
   Future<GuidIdModel> sendChangeEmailCode({required String newEmail});
 
-  Future changeEmail({required ChangeEmailModel body});
+  Future changeEmail({required ChangeEmailModel changeEmailModel});
 
   Future<TokenModel?> getToken(
       {required String login, required String password});
@@ -161,4 +165,15 @@ abstract class ApiRepository {
       required EmailCodeModel emailCodeModel});
 
   Future addAvatar({required MetadataModel metadataModel});
+
+  Future subscribePush({required String token});
+
+  Future unsubscribePush();
+
+  Future<List<NotificationModel>?> getNotifications(
+      {DateTime? skipDate, required int take});
+
+  Future<PostModel?> getPostById({required String postId});
+
+  Future deleteAvatar();
 }

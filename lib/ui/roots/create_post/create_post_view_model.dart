@@ -1,10 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+import 'package:desgram_ui/domain/exceptions/exceptions.dart';
+import 'package:desgram_ui/ui/common/no_network_dialog.dart';
+import 'package:flutter/material.dart';
 
 import 'package:desgram_ui/data/services/attach_service.dart';
 import 'package:desgram_ui/data/services/post_service.dart';
-import 'package:desgram_ui/domain/models/create_post_model.dart';
+import 'package:desgram_ui/domain/models/post/create_post_model.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
 
 class CreatePostViewModelState {
@@ -42,8 +44,9 @@ class CreatePostViewModel extends ChangeNotifier {
   final PostService _postService = PostService();
   final AttachService _attachService = AttachService();
   final TextEditingController descriptionController = TextEditingController();
+  final BuildContext context;
 
-  CreatePostViewModel() {
+  CreatePostViewModel({required this.context}) {
     descriptionController.addListener(() {
       state = state.copyWith(description: descriptionController.text);
     });
@@ -64,7 +67,7 @@ class CreatePostViewModel extends ChangeNotifier {
   }
 
   Future addImagePost() async {
-    var file = await AppNavigator.toChooseImagePostPage();
+    var file = await AppNavigator.toChooseImagePage();
     List<File> files = List.from(state.files);
     if (file != null) {
       files.add(file);
@@ -75,19 +78,30 @@ class CreatePostViewModel extends ChangeNotifier {
 
   Future createPost() async {
     if (state.files.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Вы не выбрали не одного фотографии"),
+        ),
+      );
       return;
     }
     state = state.copyWith(isLoading: true);
-    var metadataModels = await _attachService.uploadFiles(files: state.files);
-    if (metadataModels != null) {
-      await _postService.createPost(
-          model: CreatePostModel(
-              description: state.description,
-              metadataModels: metadataModels,
-              isCommentsEnabled: state.isCommentsEnabled,
-              isLikesVisible: state.isLikesVisible));
+    try {
+      var metadataModels = await _attachService.uploadFiles(files: state.files);
+      if (metadataModels != null) {
+        await _postService.createPost(
+            model: CreatePostModel(
+                description: state.description,
+                metadataModels: metadataModels,
+                isCommentsEnabled: state.isCommentsEnabled,
+                isLikesVisible: state.isLikesVisible));
+        state = state.copyWith(isLoading: false);
+        AppNavigator.popPage();
+      }
+    } on NoNetworkException {
+      showNoNetworkDialog(context: context);
       state = state.copyWith(isLoading: false);
-      AppNavigator.popPage();
     }
   }
 }

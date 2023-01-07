@@ -1,17 +1,23 @@
 import 'dart:async';
 
 import 'package:desgram_ui/domain/entities/db_entity.dart';
+import 'package:desgram_ui/domain/entities/hashtag_post.dart';
+import 'package:desgram_ui/domain/entities/interesting_post.dart';
 import 'package:desgram_ui/domain/entities/partial_user.dart';
 import 'package:desgram_ui/domain/entities/partial_user_avatar.dart';
 import 'package:desgram_ui/domain/entities/post.dart';
 import 'package:desgram_ui/domain/entities/post_content.dart';
 import 'package:desgram_ui/domain/entities/post_content_candidate.dart';
+import 'package:desgram_ui/domain/entities/search_string.dart';
+import 'package:desgram_ui/domain/entities/subscription_post.dart';
 import 'package:desgram_ui/domain/entities/user.dart';
 import 'package:desgram_ui/domain/entities/user_avatar.dart';
 import 'package:desgram_ui/domain/entities/user_avatar_candidate.dart';
+import 'package:desgram_ui/domain/entities/user_post.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:synchronized/synchronized.dart';
 import 'package:uuid/uuid.dart';
 
 class DB {
@@ -19,11 +25,12 @@ class DB {
   static final DB instanse = DB._();
   static late Database _database;
   static bool _isInit = false;
+  final Lock _lock = Lock();
 
   Future init() async {
     if (!_isInit) {
       var dbPath = await getDatabasesPath();
-      var path = join(dbPath, "db_v1.0.18.db");
+      var path = join(dbPath, "db_v1.0.39.db");
       _database = await openDatabase(
         path,
         version: 1,
@@ -54,6 +61,11 @@ class DB {
     User: (map) => User.fromMap(map),
     UserAvatar: (map) => UserAvatar.fromMap(map),
     UserAvatarCandidate: (map) => UserAvatarCandidate.fromMap(map),
+    SearchString: (map) => SearchString.fromMap(map),
+    UserPost: (map) => UserPost.fromMap(map),
+    InterestingPost: (map) => InterestingPost.fromMap(map),
+    SubscriptionPost: (map) => SubscriptionPost.fromMap(map),
+    HashtagPost: (map) => HashtagPost.fromMap(map),
   };
 
   String _dbName(Type type) {
@@ -80,11 +92,13 @@ class DB {
           whereArgs.add(value);
         }
       });
-      query = await _database.query(_dbName(T),
-          offset: skip,
-          limit: take,
-          where: whereBuilder.join(' and '),
-          whereArgs: whereArgs);
+      query = await _database.query(
+        _dbName(T),
+        offset: skip,
+        limit: take,
+        where: whereBuilder.join(' and '),
+        whereArgs: whereArgs,
+      );
     } else {
       query = await _database.query(_dbName(T), offset: skip, limit: take);
     }
@@ -118,10 +132,18 @@ class DB {
   Future<int> cleanTable<T extends DbEntity>() async =>
       await _database.delete(_dbName(T));
 
+  Future cleanAllTable() async {
+    for (var t in _factories.keys) {
+      await _database.delete(_dbName(t));
+    }
+  }
+
   Future<int> createUpdate<T extends DbEntity>(T model) async {
-    var dbItem = await getFirstOrDefault<T>(whereMap: {"id": model.id});
-    var res = dbItem == null ? insert(model) : update(model);
-    return await res;
+    return await _lock.synchronized(() async {
+      var dbItem = await getFirstOrDefault<T>(whereMap: {"id": model.id});
+      var res = dbItem == null ? insert(model) : update(model);
+      return await res;
+    });
   }
 
   Future inserRange<T extends DbEntity>(Iterable<T> values) async {
@@ -138,36 +160,23 @@ class DB {
 
   Future<void> createUpdateRange<T extends DbEntity>(Iterable<T> values,
       {bool Function(T oldItem, T newItem)? updateCond}) async {
-    var batch = DB._database.batch();
+    await _lock.synchronized(() async {
+      var batch = DB._database.batch();
+      for (var row in values) {
+        var dbItem = await getFirstOrDefault<T>(whereMap: {"id": row.id});
+        var data = row.toMap();
+        if (row.id == "") {
+          data["id"] = const Uuid().v4();
+        }
 
-    for (var row in values) {
-      var dbItem = await getFirstOrDefault<T>(whereMap: {"id": row.id});
-      var data = row.toMap();
-      if (row.id == "") {
-        data["id"] = const Uuid().v4();
+        if (dbItem == null) {
+          batch.insert(_dbName(T), data);
+        } else if (updateCond == null || updateCond(dbItem, row)) {
+          batch.update(_dbName(T), data, where: "id = ?", whereArgs: [row.id]);
+        }
       }
 
-      if (dbItem == null) {
-        batch.insert(_dbName(T), data);
-      } else if (updateCond == null || updateCond(dbItem, row)) {
-        batch.update(_dbName(T), data, where: "id = ?", whereArgs: [row.id]);
-      }
-    }
-
-    await batch.commit(noResult: true);
-  }
-
-  Future<void> deleteCreateRange<T extends DbEntity>(Iterable<T> values) async {
-    var batch = DB._database.batch();
-
-    for (var row in values) {
-      var dbItem = await getFirstOrDefault<T>(whereMap: {"id": row.id});
-      if (dbItem != null) {
-        await delete(dbItem);
-      }
-      batch.insert(_dbName(T), row.toMap());
-    }
-
-    await batch.commit(noResult: true);
+      await batch.commit(noResult: true);
+    });
   }
 }

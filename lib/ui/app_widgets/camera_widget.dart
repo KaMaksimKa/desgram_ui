@@ -57,12 +57,11 @@ class _CameraWidgetState extends State<CameraWidget> {
 
         return Stack(
           children: [
-            Transform.scale(
-              scale: scale,
-              child: Container(
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(color: Colors.black),
-                  child: CameraPreview(_cameraController!)),
+            Container(
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(color: Colors.blue),
+              child: Transform.scale(
+                  scale: scale, child: CameraPreview(_cameraController!)),
             ),
             Container(
                 alignment: Alignment.bottomCenter,

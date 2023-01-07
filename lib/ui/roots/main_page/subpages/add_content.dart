@@ -24,9 +24,7 @@ class AddContent extends StatelessWidget {
       ),
       body: Center(
           child: IconButton(
-              onPressed: () {
-                appPageNavigator.toAnotherAccountContent();
-              },
+              onPressed: () {},
               icon: const Icon(
                 Icons.add_box,
               ))),

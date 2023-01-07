@@ -1,26 +1,30 @@
 import 'dart:io';
 
-import 'package:desgram_ui/domain/models/change_is_comments_enabled_model.dart';
-import 'package:desgram_ui/domain/models/metadata_model.dart';
-import 'package:desgram_ui/domain/models/partial_user_model.dart';
-import 'package:desgram_ui/domain/models/personal_information_model.dart';
-import 'package:desgram_ui/domain/models/post_model.dart';
-import 'package:desgram_ui/domain/models/profile_model.dart';
-import 'package:desgram_ui/domain/models/update_comment_model.dart';
+import 'package:desgram_ui/domain/models/like/amount_likes_model.dart';
+import 'package:desgram_ui/domain/models/comment/change_is_comments_enabled_model.dart';
+import 'package:desgram_ui/domain/models/notification/notification_model.dart';
+import 'package:desgram_ui/domain/models/post/hashtag_model.dart';
+import 'package:desgram_ui/domain/models/attach/metadata_model.dart';
+import 'package:desgram_ui/domain/models/user/partial_user_model.dart';
+import 'package:desgram_ui/domain/models/user/personal_information_model.dart';
+import 'package:desgram_ui/domain/models/post/post_model.dart';
+import 'package:desgram_ui/domain/models/user/profile_model.dart';
+import 'package:desgram_ui/domain/models/push_token_model.dart';
+import 'package:desgram_ui/domain/models/comment/update_comment_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../../domain/models/change_email_model.dart';
-import '../../domain/models/change_likes_visibility_model.dart';
-import '../../domain/models/change_password_model.dart';
-import '../../domain/models/change_user_name_model.dart';
-import '../../domain/models/comment_model.dart';
-import '../../domain/models/create_comment_model.dart';
-import '../../domain/models/create_post_model.dart';
+import '../../domain/models/user/change_email_model.dart';
+import '../../domain/models/post/change_likes_visibility_model.dart';
+import '../../domain/models/user/change_password_model.dart';
+import '../../domain/models/user/change_user_name_model.dart';
+import '../../domain/models/comment/comment_model.dart';
+import '../../domain/models/comment/create_comment_model.dart';
+import '../../domain/models/post/create_post_model.dart';
 import '../../domain/models/guid_id_model.dart';
-import '../../domain/models/update_birthday_model.dart';
-import '../../domain/models/update_post_model.dart';
-import '../../domain/models/user_model.dart';
+import '../../domain/models/user/update_birthday_model.dart';
+import '../../domain/models/post/update_post_model.dart';
+import '../../domain/models/user/user_model.dart';
 
 part 'api_client.g.dart';
 
@@ -62,6 +66,17 @@ abstract class ApiClient {
     @Query("Skip") int skip,
     @Query("Take") int take,
   );
+
+  @GET("/api/Post/GetPostById")
+  Future<PostModel?> getPostById(
+    @Query("postId") String postId,
+  );
+
+  @GET("/api/Post/SearchHashtags")
+  Future<List<HashtagModel>?> searchHashtags(
+      @Query("SearchString") String searchString,
+      @Query("Skip") int skip,
+      @Query("Take") int take);
 
   @GET("/api/Post/GetSubscriptionsFeed")
   Future<List<PostModel>?> getSubscriptionsFeed(
@@ -108,10 +123,10 @@ abstract class ApiClient {
   );
 
   @POST("/api/Post/AddLikePost/{postId}")
-  Future<int> addLikePost(@Path("postId") String postId);
+  Future<AmountLikesModel> addLikePost(@Path("postId") String postId);
 
   @POST("/api/Post/DeleteLikePost/{postId}")
-  Future<int> deleteLikePost(@Path("postId") String postId);
+  Future<AmountLikesModel> deleteLikePost(@Path("postId") String postId);
 
   @POST("/api/Post/AddLikeComment/{commentId}")
   Future<int> addLikeComment(@Path("commentId") String commentId);
@@ -172,13 +187,16 @@ abstract class ApiClient {
   @POST("/api/User/AddAvatar")
   Future addAvatar(@Body() MetadataModel body);
 
+  @POST("/api/User/DeleteAvatar")
+  Future deleteAvatar();
+
   @POST("/api/User/UpdateProfile")
   Future updateProfile(@Body() ProfileModel body);
 
   @POST("/api/User/UpdateBirthday")
   Future updateBirthday(@Body() UpdateBirthdayModel body);
 
-  @POST("/api/User/ChangeUserName}")
+  @POST("/api/User/ChangeUserName")
   Future changeUserName(@Body() ChangeUserNameModel body);
 
   @POST("/api/User/ChangePassword")
@@ -195,4 +213,14 @@ abstract class ApiClient {
 
   @POST("/api/User/ChangeEmail")
   Future changeEmail(@Body() ChangeEmailModel body);
+
+  @POST("/api/Push/SubscribePush")
+  Future subscribePush(@Body() PushTokenModel body);
+
+  @POST("/api/Push/UnsubscribePush")
+  Future unsubscribePush();
+
+  @GET("/api/Notification/GetNotifications")
+  Future<List<NotificationModel>?> getNotifications(
+      @Query("SkipDate") String? skipDate, @Query("Take") int take);
 }

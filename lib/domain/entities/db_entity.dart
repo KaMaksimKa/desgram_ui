@@ -8,7 +8,7 @@ abstract class DbEntity<T> {
 }
 
 extension DistinctById<T extends DbEntity> on Iterable<T> {
-  Iterable<T> distinct() {
+  Iterable<T> distinctById() {
     final ids = <dynamic>{};
     var list = List<T>.from(this);
     list.retainWhere((e) => ids.add(e.id));
