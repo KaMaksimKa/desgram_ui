@@ -1,16 +1,11 @@
 # desgram_ui
 
-A new Flutter project.
+Этот проект является мобильным приложением, реализующим возможности проекта https://github.com/KaMaksimKa/Desgram, который является web api. Реализован весь функционал, который предоставляет web api.
 
-## Getting Started
+## Несколько скриншотов из приложения:
+![image](https://user-images.githubusercontent.com/85696106/211213967-2b97cd42-648b-4ae0-ac2c-6243cd36e462.jpg)
 
-This project is a starting point for a Flutter application.
+![image (1)](https://user-images.githubusercontent.com/85696106/211213990-7f41c4dd-f21d-41ae-8ff1-1069eb9b5315.jpg)
 
-A few resources to get you started if this is your first Flutter project:
+![image (3)](https://user-images.githubusercontent.com/85696106/211214031-8b333d3c-2286-48b1-894c-968d2c94c485.jpg)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
