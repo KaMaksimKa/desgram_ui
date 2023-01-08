@@ -169,6 +169,7 @@ class PostService {
       if (e.error is SocketException) {
         throw NoNetworkException();
       } else if (e.response?.statusCode == 404) {
+        _dbService.deletePost(postId: postId);
       } else {
         rethrow;
       }

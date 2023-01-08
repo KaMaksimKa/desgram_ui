@@ -7,6 +7,7 @@ import '../../../domain/exceptions/bad_request_exception.dart';
 import '../../../domain/models/user/email_code_model.dart';
 import '../../../domain/models/user/try_create_user_model.dart';
 import '../../app_navigator.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class ConfirmUserViewModelState {
   final String? codeId;
@@ -68,6 +69,8 @@ class ConfirmUserViewModel extends ChangeNotifier {
           codeId: await _userService.sendSingUpCode(tryCreateUserModel.email));
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -94,6 +97,8 @@ class ConfirmUserViewModel extends ChangeNotifier {
       } on NoNetworkException {
         state = state.copyWith(isLoading: false);
         showNoNetworkDialog(context: context);
+      } catch (e) {
+        showSomethingWentWrong(context: context);
       }
     }
   }

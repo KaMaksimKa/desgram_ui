@@ -7,6 +7,7 @@ import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 import '../../../../../domain/exceptions/exceptions.dart';
 import '../../../../../domain/models/post/post_model.dart';
 import '../../../../../inrernal/config/shared_prefs.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 
 class FeedInterestingViewModelState {
   final bool isPostsLoading;
@@ -78,6 +79,8 @@ class FeedInterestingViewModel extends SubpageViewModel {
           skip: state.posts.length, take: 12, isDeleteOld: isDeleteOld);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(
           posts: await _postService.getInterestingPostsFromDb(),

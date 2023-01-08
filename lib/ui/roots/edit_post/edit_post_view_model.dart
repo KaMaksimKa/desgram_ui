@@ -6,6 +6,8 @@ import 'package:desgram_ui/data/services/post_service.dart';
 import 'package:desgram_ui/domain/models/post/post_model.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
 
+import '../../common/something_went_wrong_dialog.dart';
+
 class EditPostViewModelState {
   final bool isEditingPost;
   final int currentImageIndex;
@@ -57,6 +59,8 @@ class EditPostViewModel extends ChangeNotifier {
       AppNavigator.popPage();
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isEditingPost: false);
     }

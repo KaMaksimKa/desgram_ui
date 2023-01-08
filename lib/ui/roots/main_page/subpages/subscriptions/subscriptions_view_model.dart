@@ -9,6 +9,7 @@ import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 
 import '../../../../../domain/exceptions/forbidden_exception.dart';
 import '../../../../common/no_network_dialog.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 
 class SubscriptionsViewModelState {
   final bool isFollowersLoading;
@@ -88,6 +89,8 @@ class SubscriptionsViewModel extends SubpageViewModel {
       notifyListeners();
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
     await loadFollowers(isDeleteOld: true);
     await loadFollowing(isDeleteOld: true);
@@ -134,6 +137,8 @@ class SubscriptionsViewModel extends SubpageViewModel {
       showNoNetworkDialog(context: context);
     } on ForbiddenException {
       state = state.copyWith(followers: []);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isFollowersLoading: false);
     }
@@ -156,6 +161,8 @@ class SubscriptionsViewModel extends SubpageViewModel {
       showNoNetworkDialog(context: context);
     } on ForbiddenException {
       state = state.copyWith(following: []);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isFollowingLoading: false);
     }
@@ -169,6 +176,8 @@ class SubscriptionsViewModel extends SubpageViewModel {
       state = state.copyWith(followers: followers);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 }

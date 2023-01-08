@@ -6,6 +6,7 @@ import '../../../data/services/user_service.dart';
 import '../../../domain/exceptions/bad_request_exception.dart';
 import '../../../domain/models/user/try_create_user_model.dart';
 import '../../app_navigator.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class RegistrationViewModelState {
   final String? userName;
@@ -139,7 +140,11 @@ class RegistrationViewModel extends ChangeNotifier {
             retryPasswordError: retryPasswordError,
             isLoading: false);
       } on NoNetworkException {
+        state = state.copyWith(isLoading: false);
         showNoNetworkDialog(context: context);
+      } catch (e) {
+        state = state.copyWith(isLoading: false);
+        showSomethingWentWrong(context: context);
       }
     }
   }

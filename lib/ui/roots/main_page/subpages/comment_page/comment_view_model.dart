@@ -12,6 +12,8 @@ import 'package:desgram_ui/domain/models/user/user_model.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../common/something_went_wrong_dialog.dart';
+
 class CommentViewModelState {
   final List<CommentModel> comments;
   final bool isCommentsLoading;
@@ -94,6 +96,8 @@ class CommentViewModel extends SubpageViewModel {
       state = state.copyWith(comments: comments);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isCommentsLoading: false);
     }
@@ -115,6 +119,8 @@ class CommentViewModel extends SubpageViewModel {
       state = state.copyWith(content: "");
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -129,6 +135,8 @@ class CommentViewModel extends SubpageViewModel {
       state = state.copyWith(comments: state.comments);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -143,6 +151,8 @@ class CommentViewModel extends SubpageViewModel {
       state = state.copyWith(comments: state.comments);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -240,6 +250,8 @@ class CommentViewModel extends SubpageViewModel {
       var comments = state.comments;
       comments.removeWhere((element) => element.id == commentId);
       state = state.copyWith(comments: comments);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 }

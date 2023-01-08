@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../../../domain/exceptions/exceptions.dart';
 import '../../../../../domain/models/user/partial_user_model.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 
 class BlockedUsersViewModelState {
   final bool isBlockedUsersLoading;
@@ -73,6 +74,8 @@ class BlockedUsersViewModel extends SubpageViewModel {
       state = state.copyWith(blockedUsers: blockedUsers);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isBlockedUsersLoading: false);
     }
@@ -90,6 +93,8 @@ class BlockedUsersViewModel extends SubpageViewModel {
       var blockedUsers = state.blockedUsers;
       blockedUsers.removeWhere((element) => element.id == userId);
       state = state.copyWith(blockedUsers: blockedUsers);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 }

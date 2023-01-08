@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../../../data/services/auth_service.dart';
 import '../../../../../domain/exceptions/exceptions.dart';
 import '../../../../../domain/models/post/post_model.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 
 class SearchViewModelState {
   final List<PostModel> posts;
@@ -72,6 +73,8 @@ class SearchViewModel extends SubpageViewModel {
           skip: state.posts.length, take: 18, isDeleteOld: isDeleteOld);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(
           isPostsLoading: false,

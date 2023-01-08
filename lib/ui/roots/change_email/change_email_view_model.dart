@@ -6,6 +6,7 @@ import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../domain/exceptions/bad_request_exception.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class ChangeEmailViewModel extends ChangeNotifier {
   final TextEditingController emailController = TextEditingController();
@@ -35,6 +36,8 @@ class ChangeEmailViewModel extends ChangeNotifier {
         }
       } on NoNetworkException {
         showNoNetworkDialog(context: context);
+      } catch (e) {
+        showSomethingWentWrong(context: context);
       } finally {
         notifyListeners();
       }

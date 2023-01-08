@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../data/services/user_service.dart';
 import '../../../domain/exceptions/bad_request_exception.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class ChangeUserNameViewModel extends ChangeNotifier {
   final String userName;
@@ -38,6 +39,8 @@ class ChangeUserNameViewModel extends ChangeNotifier {
         }
       } on NoNetworkException {
         showNoNetworkDialog(context: context);
+      } catch (e) {
+        showSomethingWentWrong(context: context);
       } finally {
         notifyListeners();
       }

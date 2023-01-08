@@ -8,6 +8,7 @@ import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 import '../../../../../domain/exceptions/exceptions.dart';
 import '../../../../../domain/exceptions/not_found_exception.dart';
 import '../../../../../domain/models/user/partial_user_model.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 
 class SubRequestsViewModelState {
   final bool isSubRequestsLoading;
@@ -74,6 +75,8 @@ class SubRequestsViewModel extends SubpageViewModel {
       state = state.copyWith(subRequests: subRequests);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isSubRequestsLoading: false);
     }
@@ -91,6 +94,8 @@ class SubRequestsViewModel extends SubpageViewModel {
       var users = state.subRequests;
       users.remove(user);
       state = state.copyWith(subRequests: users);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -106,6 +111,8 @@ class SubRequestsViewModel extends SubpageViewModel {
       var users = state.subRequests;
       users.remove(user);
       state = state.copyWith(subRequests: users);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 }

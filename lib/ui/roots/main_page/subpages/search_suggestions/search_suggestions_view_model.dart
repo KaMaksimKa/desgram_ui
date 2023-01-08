@@ -8,6 +8,8 @@ import 'package:desgram_ui/domain/models/post/hashtag_model.dart';
 import 'package:desgram_ui/domain/models/user/partial_user_model.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 
+import '../../../../common/something_went_wrong_dialog.dart';
+
 class SearchSuggestionsViewModelState {
   final List<String> suggestionsSearchString;
   final List<PartialUserModel> suggestionsUsers;
@@ -97,6 +99,8 @@ class SearchSuggestionsViewModel extends SubpageViewModel {
         suggestionsSearchString: await _dbService.getSearchString(
             count: 7, searchString: searchString),
       );
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 

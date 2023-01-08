@@ -6,6 +6,8 @@ import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 
+import '../../../../common/something_went_wrong_dialog.dart';
+
 class SettingsViewModel extends SubpageViewModel {
   UserModel? currentUser;
   final UserService _userService = UserService();
@@ -39,6 +41,8 @@ class SettingsViewModel extends SubpageViewModel {
       await _userService.changeAccountAvailability(isPrivate: true);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -47,6 +51,8 @@ class SettingsViewModel extends SubpageViewModel {
       await _userService.changeAccountAvailability(isPrivate: false);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -56,6 +62,8 @@ class SettingsViewModel extends SubpageViewModel {
       AppNavigator.toLoader();
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 }

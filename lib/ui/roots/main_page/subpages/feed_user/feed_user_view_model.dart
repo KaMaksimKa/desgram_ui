@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:desgram_ui/domain/models/post/post_model.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 
+import '../../../../common/something_went_wrong_dialog.dart';
+
 class FeedUserViewModelState {
   final bool isPostsLoading;
   final List<PostModel> posts;
@@ -76,6 +78,8 @@ class FeedUserWiewModel extends SubpageViewModel {
           userId: userId, skip: state.posts.length, take: 12);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(
           posts: await _postService.getPostsByUserIdFromDb(userId: userId),

@@ -6,6 +6,7 @@ import '../../../data/services/user_service.dart';
 import '../../../domain/models/user/personal_information_model.dart';
 import '../../../utils/helpers/date_time_helper.dart';
 import '../../app_navigator.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class EditPersonalInformationViewModel extends ChangeNotifier {
   PersonalInformationModel? _personalInformationModel;
@@ -35,6 +36,8 @@ class EditPersonalInformationViewModel extends ChangeNotifier {
       personalInformationModel = await _userService.getPersonalInformation();
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 

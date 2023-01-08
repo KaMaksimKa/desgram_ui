@@ -90,7 +90,10 @@ class ModalBottomSheets {
                       )),
                   if (currentUser.avatar != null)
                     TextButton(
-                        onPressed: _deleteAvatar,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          _deleteAvatar();
+                        },
                         style:
                             TextButton.styleFrom(foregroundColor: Colors.black),
                         child: Row(

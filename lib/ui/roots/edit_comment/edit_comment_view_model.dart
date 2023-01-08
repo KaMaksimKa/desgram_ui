@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:desgram_ui/domain/models/comment/comment_model.dart';
 
 import '../../app_navigator.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class EditCommentViewModelState {
   final bool isEditingComment;
@@ -64,6 +65,8 @@ class EditCommentViewModel extends ChangeNotifier {
       AppNavigator.popPage();
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isEditingComment: false);
     }

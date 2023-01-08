@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../domain/exceptions/exceptions.dart';
 import '../../../../../domain/exceptions/forbidden_exception.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 import '../account/account_view_model.dart';
 
 class AnotherAccountViewModel extends SubpageViewModel {
@@ -75,6 +76,8 @@ class AnotherAccountViewModel extends SubpageViewModel {
       await _userService.updateUserInDb(userId: userId);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -90,9 +93,12 @@ class AnotherAccountViewModel extends SubpageViewModel {
           skip: state.posts.length,
           take: 12,
           isDeleteOld: isDeleteOld);
+      // ignore: empty_catches
     } on ForbiddenException {
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(
           isPostsLoading: false,
@@ -112,6 +118,8 @@ class AnotherAccountViewModel extends SubpageViewModel {
       await _subscribeService.subscribe(userId: userId);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -120,6 +128,8 @@ class AnotherAccountViewModel extends SubpageViewModel {
       await _subscribeService.unsubscribe(userId: userId);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -128,6 +138,8 @@ class AnotherAccountViewModel extends SubpageViewModel {
       await _subscribeService.unsubscribe(userId: userId);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -209,6 +221,8 @@ class AnotherAccountViewModel extends SubpageViewModel {
       await _blockedService.blockUser(userId: userId);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -217,6 +231,8 @@ class AnotherAccountViewModel extends SubpageViewModel {
       await _blockedService.unblockUser(userId: userId);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 }

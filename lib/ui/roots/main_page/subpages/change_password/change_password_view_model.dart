@@ -7,6 +7,7 @@ import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 
 import '../../../../../data/services/user_service.dart';
 import '../../../../../domain/exceptions/bad_request_exception.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 
 class ChangePasswordViewModelState {
   final String? oldPassword;
@@ -120,7 +121,11 @@ class ChangePasswordViewModel extends SubpageViewModel {
             retryNewPasswordError: retryNewPasswordError,
             isLoading: false);
       } on NoNetworkException {
+        state = state.copyWith(isLoading: false);
         showNoNetworkDialog(context: context);
+      } catch (e) {
+        state = state.copyWith(isLoading: false);
+        showSomethingWentWrong(context: context);
       }
     }
   }

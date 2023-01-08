@@ -64,8 +64,8 @@ class ApiModule {
           } catch (e) {
             AuthService().cleanUserLocalData();
             AppNavigator.toAuth(isRemoveUntil: true);
-            return handler
-                .resolve(Response(requestOptions: options, statusCode: 400));
+            return handler.next(DioError(
+                requestOptions: options, error: UnauthorizedException()));
           }
           return handler.resolve(await dio.fetch(options));
         } else {

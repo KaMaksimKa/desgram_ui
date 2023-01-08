@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../data/services/user_service.dart';
 import '../../../domain/exceptions/bad_request_exception.dart';
 import '../../../domain/models/user/email_code_model.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class ConfirmEmailViewModelState {
   final String? codeId;
@@ -66,6 +67,8 @@ class ConfirmEmailViewModel extends ChangeNotifier {
           codeId: await _userService.sendChangeEmailCode(newEmail: newEmail));
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -93,6 +96,9 @@ class ConfirmEmailViewModel extends ChangeNotifier {
       } on NoNetworkException {
         state = state.copyWith(isLoading: false);
         showNoNetworkDialog(context: context);
+      } catch (e) {
+        showSomethingWentWrong(context: context);
+        state = state.copyWith(isLoading: false);
       }
     }
   }

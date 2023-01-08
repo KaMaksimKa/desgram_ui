@@ -10,6 +10,7 @@ import '../../../../../domain/models/post/post_model.dart';
 import '../../../../../domain/models/user/user_model.dart';
 import '../../../../../inrernal/config/shared_prefs.dart';
 import '../../../../app_navigator.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 import '../../main_page_navigator.dart';
 import '../subscriptions/subscriptions_view_model.dart';
 
@@ -92,6 +93,8 @@ class AccountViewModel extends SubpageViewModel {
       await _userService.updateUserInDb(userId: currentUserId);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -109,6 +112,8 @@ class AccountViewModel extends SubpageViewModel {
           isDeleteOld: isDeleteOld);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(
           isPostsLoading: false,
@@ -130,6 +135,8 @@ class AccountViewModel extends SubpageViewModel {
       AppNavigator.toAuth(isRemoveUntil: true);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 

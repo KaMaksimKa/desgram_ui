@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:desgram_ui/domain/exceptions/bad_request_exception.dart';
 import 'package:desgram_ui/domain/exceptions/exceptions.dart';
 import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:desgram_ui/data/services/attach_service.dart';
 import 'package:desgram_ui/data/services/post_service.dart';
 import 'package:desgram_ui/domain/models/post/create_post_model.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
+
+import '../../common/something_went_wrong_dialog.dart';
 
 class CreatePostViewModelState {
   final String description;
@@ -96,11 +99,13 @@ class CreatePostViewModel extends ChangeNotifier {
                 metadataModels: metadataModels,
                 isCommentsEnabled: state.isCommentsEnabled,
                 isLikesVisible: state.isLikesVisible));
-        state = state.copyWith(isLoading: false);
         AppNavigator.popPage();
       }
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
+    } finally {
       state = state.copyWith(isLoading: false);
     }
   }

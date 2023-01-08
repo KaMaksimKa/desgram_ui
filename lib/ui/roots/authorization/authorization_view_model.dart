@@ -1,3 +1,4 @@
+import 'package:desgram_ui/ui/common/something_went_wrong_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/services/auth_service.dart';
@@ -194,8 +195,11 @@ class AuthorizationViewModel extends ChangeNotifier {
             );
           },
         );
+      } catch (e) {
+        showSomethingWentWrong(context: context);
+      } finally {
+        state = state.copyWith(isLoading: false);
       }
-      state = state.copyWith(isLoading: false);
     }
   }
 }

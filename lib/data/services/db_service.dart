@@ -340,6 +340,12 @@ class DbService {
 
       await DB.instanse.createUpdate(userAvatar);
       await DB.instanse.createUpdateRange(userAvatarCandidates);
+    } else {
+      var oldImageContent = await DB.instanse
+          .getFirstOrDefault<UserAvatar>(whereMap: {"userId": userModel.id});
+      if (oldImageContent != null) {
+        DB.instanse.delete(oldImageContent);
+      }
     }
   }
 

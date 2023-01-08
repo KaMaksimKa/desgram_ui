@@ -9,6 +9,8 @@ import 'package:desgram_ui/domain/models/notification/notification_model.dart';
 import 'package:desgram_ui/domain/models/notification/subscription_notification_model.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 
+import '../../../../common/something_went_wrong_dialog.dart';
+
 class NotificationsViewModelState {
   final List<NotificationModel> notifications;
   final bool isNotificationsLoading;
@@ -88,6 +90,8 @@ class NotificationsViewModel extends SubpageViewModel {
       state = state.copyWith(notifications: notifications);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isNotificationsLoading: false);
     }
@@ -106,6 +110,8 @@ class NotificationsViewModel extends SubpageViewModel {
       state = state.copyWith(notifications: notifications);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -135,6 +141,8 @@ class NotificationsViewModel extends SubpageViewModel {
       var notifications = state.notifications;
       notifications.remove(notification);
       state = state.copyWith(notifications: notifications);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -147,6 +155,9 @@ class NotificationsViewModel extends SubpageViewModel {
       }
       return subRequests.isNotEmpty;
     } on NoNetworkException {
+      return false;
+    } catch (e) {
+      showSomethingWentWrong(context: context);
       return false;
     }
   }

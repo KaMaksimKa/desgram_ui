@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../data/services/user_service.dart';
 import '../../../domain/models/user/user_model.dart';
 import '../../app_navigator.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class EditProfileViewModelState {
   final UserModel? currentUserModel;
@@ -84,6 +85,8 @@ class EditProfileViewModel extends ChangeNotifier {
           isLoadingPage: false);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     }
   }
 
@@ -95,6 +98,8 @@ class EditProfileViewModel extends ChangeNotifier {
       AppNavigator.popPage();
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isUpdatingProfile: false);
     }

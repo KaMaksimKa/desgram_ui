@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../data/services/user_service.dart';
 import '../../../utils/helpers/date_time_helper.dart';
 import '../../app_navigator.dart';
+import '../../common/something_went_wrong_dialog.dart';
 
 class EditBirthDateViewModelState {
   final DateTime? newBirthDate;
@@ -75,6 +76,8 @@ class EditBirthDateViewModel extends ChangeNotifier {
       AppNavigator.popPage();
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state.copyWith(isUpdatingBirthday: false);
     }

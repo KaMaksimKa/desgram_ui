@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../../../data/services/user_service.dart';
 import '../../../../../domain/exceptions/exceptions.dart';
 import '../../../../../domain/models/user/partial_user_model.dart';
+import '../../../../common/something_went_wrong_dialog.dart';
 
 class SearchResultViewModelState {
   final bool isHashtagLoading;
@@ -136,6 +137,8 @@ class SearchResultViewModel extends SubpageViewModel {
       state = state.copyWith(hashtags: hashtags);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isHashtagLoading: false);
     }
@@ -161,6 +164,8 @@ class SearchResultViewModel extends SubpageViewModel {
       state = state.copyWith(users: users);
     } on NoNetworkException {
       showNoNetworkDialog(context: context);
+    } catch (e) {
+      showSomethingWentWrong(context: context);
     } finally {
       state = state.copyWith(isUsersLoading: false);
     }
