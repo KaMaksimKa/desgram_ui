@@ -81,8 +81,9 @@ class AuthService {
 
   Future logoutFromAllDevice() async {
     try {
+      await _repository.unsubscribePush();
       await _repository.logoutAllDevice();
-      await logout();
+      cleanUserLocalData();
     } on DioError catch (e) {
       if (e.error is SocketException) {
         throw NoNetworkException();
