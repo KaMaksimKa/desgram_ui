@@ -1,10 +1,6 @@
-import 'package:desgram_ui/data/services/user_service.dart';
-import 'package:desgram_ui/utils/helpers/date_time_helper.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'package:desgram_ui/domain/models/user/personal_information_model.dart';
 
 import 'edit_personal_information_view_model.dart';
 

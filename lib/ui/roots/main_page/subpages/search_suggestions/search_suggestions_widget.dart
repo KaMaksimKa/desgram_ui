@@ -1,4 +1,3 @@
-import 'package:desgram_ui/domain/models/attach/image_content_model.dart';
 import 'package:desgram_ui/ui/app_widgets/image_user_avatar.dart';
 import 'package:desgram_ui/ui/roots/main_page/main_page_navigator.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/search_suggestions/search_suggestions_view_model.dart';

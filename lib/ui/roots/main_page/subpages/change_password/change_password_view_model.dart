@@ -100,7 +100,7 @@ class ChangePasswordViewModel extends SubpageViewModel {
                 retryNewPassword: retryNewPassword)
             .then((value) => state = state.copyWith(isLoading: false));
 
-        AppNavigator.popPage();
+        mainPageNavigator.pop();
       } on BadRequestException catch (e) {
         String? oldPasswordError;
         String? newPasswordError;

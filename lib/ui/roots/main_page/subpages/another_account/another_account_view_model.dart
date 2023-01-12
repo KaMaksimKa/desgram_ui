@@ -4,7 +4,6 @@ import 'package:desgram_ui/data/services/subscription_service.dart';
 import 'package:desgram_ui/data/services/user_service.dart';
 import 'package:desgram_ui/domain/models/user/user_model.dart';
 import 'package:desgram_ui/inrernal/config/shared_prefs.dart';
-import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subscriptions/subscriptions_view_model.dart';

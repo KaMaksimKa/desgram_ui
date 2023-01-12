@@ -1,4 +1,3 @@
-import 'package:desgram_ui/domain/models/attach/image_content_model.dart';
 import 'package:desgram_ui/ui/app_widgets/image_user_avatar.dart';
 import 'package:desgram_ui/ui/roots/main_page/main_page_navigator.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subscriptions/subscriptions_view_model.dart';
@@ -17,7 +16,7 @@ class SubscriptionsWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

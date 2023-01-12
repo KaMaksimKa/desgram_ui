@@ -7,8 +7,9 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+// ignore: must_be_immutable
 class CropImageWidget extends StatefulWidget {
-  File fileImage;
+  final File fileImage;
   final double aspectRatio;
 
   late double height;

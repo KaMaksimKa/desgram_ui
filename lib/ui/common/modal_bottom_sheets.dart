@@ -5,6 +5,7 @@ import 'package:desgram_ui/inrernal/config/shared_prefs.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:desgram_ui/ui/app_widgets/image_user_avatar.dart';
 import 'package:desgram_ui/ui/common/no_network_dialog.dart';
+import 'package:desgram_ui/ui/common/something_went_wrong_dialog.dart';
 import 'package:flutter/material.dart';
 
 class ModalBottomSheets {
@@ -142,6 +143,8 @@ class ModalBottomSheets {
       }
     } on NoNetworkException {
       showNoNetworkDialog(context: AppNavigator.key.currentContext!);
+    } catch (e) {
+      showSomethingWentWrong(context: AppNavigator.key.currentContext!);
     } finally {
       AppNavigator.popPage();
     }
@@ -153,6 +156,8 @@ class ModalBottomSheets {
       await _userService.deleteAvatar();
     } on NoNetworkException {
       showNoNetworkDialog(context: AppNavigator.key.currentContext!);
+    } catch (e) {
+      showSomethingWentWrong(context: AppNavigator.key.currentContext!);
     } finally {
       AppNavigator.popPage();
     }

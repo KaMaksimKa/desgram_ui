@@ -30,7 +30,7 @@ class DB {
   Future init() async {
     if (!_isInit) {
       var dbPath = await getDatabasesPath();
-      var path = join(dbPath, "db_v1.0.39.db");
+      var path = join(dbPath, "db_v1.0.40.db");
       _database = await openDatabase(
         path,
         version: 1,

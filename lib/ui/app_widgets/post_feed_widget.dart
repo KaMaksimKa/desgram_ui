@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:desgram_ui/data/services/database.dart';
 import 'package:desgram_ui/data/services/db_service.dart';
 import 'package:desgram_ui/data/services/post_service.dart';
 import 'package:desgram_ui/domain/exceptions/exceptions.dart';
@@ -12,9 +11,9 @@ import 'package:desgram_ui/inrernal/dependencies/api_module.dart';
 import 'package:desgram_ui/ui/roots/main_page/main_page_navigator.dart';
 import 'package:desgram_ui/utils/helpers/image_content_helper.dart';
 
-import '../../domain/models/attach/image_content_model.dart';
 import 'image_user_avatar.dart';
 
+// ignore: must_be_immutable
 class PostFeedWidget extends StatefulWidget {
   PostModel? post;
   final MainPageNavigator mainPageNavigator;

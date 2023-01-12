@@ -28,101 +28,99 @@ class SettingsWidget extends StatelessWidget {
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
-              child: Container(
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                currentUser.isPrivate
-                    ? TextButton.icon(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          alignment: Alignment.centerLeft,
-                          minimumSize: const Size.fromHeight(50),
-                          textStyle: const TextStyle(fontSize: 20),
-                        ),
-                        onPressed: () {
-                          viewModel.makeAccountOpen();
-                        },
-                        icon: const Icon(
-                          Icons.lock_open_outlined,
-                          size: 30,
-                        ),
-                        label: const Text(
-                          "Сделать аккаунт открытым",
-                        ))
-                    : TextButton.icon(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          alignment: Alignment.centerLeft,
-                          minimumSize: const Size.fromHeight(50),
-                          textStyle: const TextStyle(fontSize: 20),
-                        ),
-                        onPressed: () {
-                          viewModel.makeAccountPrivate();
-                        },
-                        icon: const Icon(
-                          Icons.lock_outline,
-                          size: 30,
-                        ),
-                        label: const Text(
-                          "Сделать аккаунт приватным",
-                        )),
-                TextButton.icon(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      alignment: Alignment.centerLeft,
-                      minimumSize: const Size.fromHeight(50),
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () {
-                      viewModel.mainPageNavigator.toChangePassword();
-                    },
-                    icon: const Icon(
-                      Icons.key_outlined,
-                      size: 30,
-                    ),
-                    label: const Text(
-                      "Изменить пароль",
-                    )),
-                TextButton.icon(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      alignment: Alignment.centerLeft,
-                      minimumSize: const Size.fromHeight(50),
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () {
-                      viewModel.mainPageNavigator.toBlockedUsers();
-                    },
-                    icon: const Icon(
-                      Icons.close_rounded,
-                      size: 30,
-                    ),
-                    label: const Text(
-                      "Заблокированные аккаунты",
-                    )),
-                TextButton.icon(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      alignment: Alignment.centerLeft,
-                      minimumSize: const Size.fromHeight(50),
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () {
-                      viewModel.logoutFromAllDevice();
-                    },
-                    icon: const Icon(
-                      Icons.logout,
-                      size: 30,
-                    ),
-                    label: const Text(
-                      "Выйти со всех устройств",
-                    )),
-              ]),
-            )),
+              currentUser.isPrivate
+                  ? TextButton.icon(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        alignment: Alignment.centerLeft,
+                        minimumSize: const Size.fromHeight(50),
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        viewModel.makeAccountOpen();
+                      },
+                      icon: const Icon(
+                        Icons.lock_open_outlined,
+                        size: 30,
+                      ),
+                      label: const Text(
+                        "Сделать аккаунт открытым",
+                      ))
+                  : TextButton.icon(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        alignment: Alignment.centerLeft,
+                        minimumSize: const Size.fromHeight(50),
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        viewModel.makeAccountPrivate();
+                      },
+                      icon: const Icon(
+                        Icons.lock_outline,
+                        size: 30,
+                      ),
+                      label: const Text(
+                        "Сделать аккаунт приватным",
+                      )),
+              TextButton.icon(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    alignment: Alignment.centerLeft,
+                    minimumSize: const Size.fromHeight(50),
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () {
+                    viewModel.mainPageNavigator.toChangePassword();
+                  },
+                  icon: const Icon(
+                    Icons.key_outlined,
+                    size: 30,
+                  ),
+                  label: const Text(
+                    "Изменить пароль",
+                  )),
+              TextButton.icon(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    alignment: Alignment.centerLeft,
+                    minimumSize: const Size.fromHeight(50),
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () {
+                    viewModel.mainPageNavigator.toBlockedUsers();
+                  },
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    size: 30,
+                  ),
+                  label: const Text(
+                    "Заблокированные аккаунты",
+                  )),
+              TextButton.icon(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    alignment: Alignment.centerLeft,
+                    minimumSize: const Size.fromHeight(50),
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () {
+                    viewModel.logoutFromAllDevice();
+                  },
+                  icon: const Icon(
+                    Icons.logout,
+                    size: 30,
+                  ),
+                  label: const Text(
+                    "Выйти со всех устройств",
+                  )),
+            ])),
     );
   }
 

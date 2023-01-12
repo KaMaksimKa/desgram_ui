@@ -105,7 +105,7 @@ class SearchSuggestionsViewModel extends SubpageViewModel {
   }
 
   Future toSearchResult(String searchString) async {
-    if (searchString.isEmpty) {
+    if (searchString.isEmpty || searchString == "#") {
       return;
     }
     await _dbService.addSearchString(searchString: searchString);

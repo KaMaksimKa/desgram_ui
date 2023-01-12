@@ -42,7 +42,7 @@ class SearchResultWidget extends StatelessWidget {
           ),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

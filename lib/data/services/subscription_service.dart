@@ -7,7 +7,6 @@ import 'package:desgram_ui/domain/repository/api_repository.dart';
 import 'package:desgram_ui/inrernal/dependencies/repository_module.dart';
 import 'package:dio/dio.dart';
 
-import '../../domain/exceptions/bad_request_exception.dart';
 import '../../domain/exceptions/exceptions.dart';
 import '../../domain/exceptions/forbidden_exception.dart';
 

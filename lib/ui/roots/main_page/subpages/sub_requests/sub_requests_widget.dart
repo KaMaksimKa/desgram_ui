@@ -1,5 +1,4 @@
 import 'package:desgram_ui/ui/roots/main_page/main_page_navigator.dart';
-import 'package:desgram_ui/ui/roots/main_page/subpages/blocked_users/blocked_users_view_model.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/sub_requests/sub_requests_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

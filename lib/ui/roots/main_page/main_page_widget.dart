@@ -1,4 +1,5 @@
 import 'package:desgram_ui/ui/app_navigator.dart';
+import 'package:desgram_ui/ui/app_widgets/image_user_avatar.dart';
 import 'package:desgram_ui/ui/roots/main_page/main_page_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,26 +56,30 @@ class MainPage extends StatelessWidget {
           currentIndex: viewModel.indexBottomBar,
           iconSize: 30,
           onTap: viewModel.addStackIndexBottomBar,
-          items: const [
-            BottomNavigationBarItem(
+          items: [
+            const BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
                 activeIcon: Icon(Icons.home),
                 label: "Home"),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
                 icon: Icon(Icons.search_outlined),
                 activeIcon: Icon(Icons.search),
                 label: "Search"),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
                 icon: Icon(Icons.add_box_outlined),
                 activeIcon: Icon(Icons.add_box),
                 label: "Add"),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
                 icon: Icon(Icons.favorite_outline),
                 activeIcon: Icon(Icons.favorite),
                 label: "Favorite"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle_outlined),
-                activeIcon: Icon(Icons.account_circle),
+                icon: ImageUserAvatar(
+                    imageContentModel: viewModel.currentUserModel?.avatar,
+                    size: 35),
+                activeIcon: ImageUserAvatar(
+                    imageContentModel: viewModel.currentUserModel?.avatar,
+                    size: 35),
                 label: "Account"),
           ],
         ),

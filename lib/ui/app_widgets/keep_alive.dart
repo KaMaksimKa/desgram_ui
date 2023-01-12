@@ -12,6 +12,7 @@ class _KeepAliveWidgetState extends State<KeepAliveWidget>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return widget.child;
   }
 

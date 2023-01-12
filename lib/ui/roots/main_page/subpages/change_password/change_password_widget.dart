@@ -3,8 +3,6 @@ import 'package:desgram_ui/ui/roots/main_page/subpages/change_password/change_pa
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:desgram_ui/ui/app_navigator.dart';
-
 class ChangePasswordWidget extends StatelessWidget {
   const ChangePasswordWidget({super.key});
 

@@ -2,8 +2,6 @@ import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/services/auth_service.dart';
-import '../../../domain/exceptions/exceptions.dart';
 import 'authorization_view_model.dart';
 
 class AuthorizationPage extends StatelessWidget {

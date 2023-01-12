@@ -1,7 +1,6 @@
 import 'package:desgram_ui/domain/models/user/partial_user_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../attach/image_with_url_model.dart';
 import '../post/partial_post_model.dart';
 
 part 'comment_notification_model.g.dart';

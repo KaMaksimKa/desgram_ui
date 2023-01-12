@@ -1,10 +1,8 @@
 import 'package:desgram_ui/data/services/post_service.dart';
-import 'package:desgram_ui/data/services/user_service.dart';
 import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../data/services/auth_service.dart';
 import '../../../../../domain/exceptions/exceptions.dart';
 import '../../../../../domain/models/post/post_model.dart';
 import '../../../../common/something_went_wrong_dialog.dart';
@@ -30,8 +28,6 @@ class SearchViewModelState {
 }
 
 class SearchViewModel extends SubpageViewModel {
-  final AuthService _authService = AuthService();
-  final UserService _userService = UserService();
   final PostService _postService = PostService();
   ScrollController scrollController = ScrollController();
 

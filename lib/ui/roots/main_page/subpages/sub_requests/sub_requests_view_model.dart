@@ -2,7 +2,6 @@ import 'package:desgram_ui/data/services/subscription_service.dart';
 import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:desgram_ui/data/services/blocked_service.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/subpage_view_model.dart';
 
 import '../../../../../domain/exceptions/exceptions.dart';

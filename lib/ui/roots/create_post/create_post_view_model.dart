@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:desgram_ui/domain/exceptions/bad_request_exception.dart';
 import 'package:desgram_ui/domain/exceptions/exceptions.dart';
 import 'package:desgram_ui/ui/common/no_network_dialog.dart';
 import 'package:flutter/material.dart';

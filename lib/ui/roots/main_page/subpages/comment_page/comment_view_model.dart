@@ -1,7 +1,6 @@
 import 'package:desgram_ui/domain/exceptions/not_found_exception.dart';
 import 'package:desgram_ui/ui/app_navigator.dart';
 import 'package:desgram_ui/ui/common/no_network_dialog.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:desgram_ui/data/services/post_service.dart';
 import 'package:desgram_ui/data/services/user_service.dart';

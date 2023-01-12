@@ -10,7 +10,6 @@ class CreatePostWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var viewModel = context.watch<CreatePostViewModel>();
-    var files = viewModel.state.files;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(250, 250, 250, 1),
@@ -43,14 +42,14 @@ class CreatePostWidget extends StatelessWidget {
             icon: const Icon(Icons.close)),
       ),
       body: Column(children: [
-        Container(
+        SizedBox(
           height: 80,
           child: ListView.builder(
             itemCount: viewModel.state.files.length + 1,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               if (index == 0) {
-                return Container(
+                return SizedBox(
                   // margin: EdgeInsets.all(3),
                   width: 80.0,
                   child: IconButton(
@@ -62,7 +61,7 @@ class CreatePostWidget extends StatelessWidget {
                 );
               }
               return Container(
-                margin: EdgeInsets.all(3),
+                margin: const EdgeInsets.all(3),
                 width: 80.0,
                 decoration: BoxDecoration(
                     image: DecorationImage(

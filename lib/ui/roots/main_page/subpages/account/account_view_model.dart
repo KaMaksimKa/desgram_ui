@@ -11,7 +11,6 @@ import '../../../../../domain/models/user/user_model.dart';
 import '../../../../../inrernal/config/shared_prefs.dart';
 import '../../../../app_navigator.dart';
 import '../../../../common/something_went_wrong_dialog.dart';
-import '../../main_page_navigator.dart';
 import '../subscriptions/subscriptions_view_model.dart';
 
 class AccountViewModelState {
