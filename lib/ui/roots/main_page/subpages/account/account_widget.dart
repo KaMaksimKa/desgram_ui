@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:desgram_ui/ui/app_widgets/post_on_grid_widget.dart';
 import 'package:desgram_ui/ui/common/modal_bottom_sheets.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/account/account_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:desgram_ui/inrernal/dependencies/api_module.dart';
 import 'package:desgram_ui/ui/app_widgets/image_user_avatar.dart';
 
 import '../../main_page_navigator.dart';
@@ -166,21 +165,10 @@ class AccountWidget extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         return GestureDetector(
-                          onTap: () => viewModel.mainPageNavigator
-                              .toFeedUser(viewModel.currentUserId),
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: CachedNetworkImageProvider(baseUrl +
-                                        viewModel
-                                            .state
-                                            .posts[index]
-                                            .imageContents[0]
-                                            .imageCandidates[0]
-                                            .url))),
-                          ),
-                        );
+                            onTap: () => viewModel.mainPageNavigator
+                                .toFeedUser(viewModel.currentUserId),
+                            child: PostOnGridWidget(
+                                post: viewModel.state.posts[index]));
                       },
                       childCount: viewModel.state.posts.length,
                     ),

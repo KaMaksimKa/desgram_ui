@@ -1,11 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:desgram_ui/ui/app_widgets/user_action_button.dart';
 import 'package:desgram_ui/ui/roots/main_page/subpages/another_account/another_account_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../inrernal/dependencies/api_module.dart';
 import '../../../../app_widgets/image_user_avatar.dart';
+import '../../../../app_widgets/post_on_grid_widget.dart';
 import '../../main_page_navigator.dart';
 
 class AnotherAccountWidget extends StatelessWidget {
@@ -157,18 +156,8 @@ class AnotherAccountWidget extends StatelessWidget {
                         return GestureDetector(
                           onTap: () => viewModel.mainPageNavigator
                               .toFeedUser(viewModel.userId),
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: CachedNetworkImageProvider(baseUrl +
-                                        viewModel
-                                            .state
-                                            .posts[index]
-                                            .imageContents[0]
-                                            .imageCandidates[0]
-                                            .url))),
-                          ),
+                          child: PostOnGridWidget(
+                              post: viewModel.state.posts[index]),
                         );
                       },
                       childCount: viewModel.state.posts.length,
